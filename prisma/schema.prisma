@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,8 +7,120 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Post {
-  id              String @id @default(auto()) @map("_id") @db.ObjectId
-  title           String
-  username        String
+model User {
+  id                  String  @id @default(uuid()) @map("_id") @db.ObjectId
+  name                String
+  email               String
+  role                Role    @default(User)
+  associatedFan       Fan?
+  associatedCelebrity Celebrity?
+  associatedBusiness  Business?
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+}
+
+model Fan {
+  id                  String @id @default(uuid()) @map("_id") @db.ObjectId
+  name                String
+  email               String @unique
+  location            String
+  locationVerified    Boolean
+  age                 Int
+  interests           String[]
+  fanVerified         Boolean
+  profilePic          String?
+  reviewList          Review[]
+  user                User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId              String @db.ObjectId @unique
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+}
+
+model Celebrity {
+  id                  String @id @default(uuid()) @map("_id") @db.ObjectId
+  name                String 
+  email               String @unique
+  location            String
+  locationVerified    Boolean @default(false)
+  nickname            String
+  biography           String
+  description         String
+  associatedBrands    String[]
+  categories          String[]
+  age                 Int
+  gender              String
+  languages           String[]
+  interests           String[]
+  // need to see what to do with social networks
+  celebrityVerified   Boolean @default(false)
+  media               String[]
+  rating              Int?
+  profilePic          String?
+  availableDays       Day[]
+  reviewList          Review[]
+  workList            Work[]
+  associatedUser      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId              String @db.ObjectId @unique
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+}
+
+model Business {
+  id                  String @id @default(uuid()) @map("_id") @db.ObjectId
+  name                String
+  email               String @unique
+  businessEmail       String?
+  location            String
+  description         String
+  categories          String[]
+  // need to see what to do with social networks  
+  businessVerified    Boolean
+  associatedUser      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId              String @db.ObjectId @unique
+  images              String[]
+  profilePic          String?
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+}
+
+model Work {
+  id                  String @id @default(uuid()) @map("_id") @db.ObjectId
+  title               String
+  type                String
+  price               Float
+  description         String
+  duration            String
+  online              Boolean
+  collaboration       Boolean
+  celebrity           Celebrity @relation(fields: [celebrityId], references: [id], onDelete: Cascade)
+  celebrityId         String    @db.ObjectId
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+}
+
+model Review {
+  id                  String @id @default(uuid()) @map("_id") @db.ObjectId
+  title               String
+  date                DateTime
+  description         String
+  images              String[]
+  stars               Float
+  celebrity           Celebrity @relation(fields: [celebrityId], references: [id], onDelete: Cascade)
+  celebrityId         String @db.ObjectId
+  author              Fan       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId            String @db.ObjectId
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+}
+
+model Day {
+  id            Int       @id @map("_id") 
+  celebrity     Celebrity @relation(fields: [celebrityId], references: [id])
+  celebrityId   String    @db.ObjectId
+  date          DateTime
+}
+
+enum Role {
+  User
+  Admin
 }
