@@ -1,18 +1,4 @@
-import { prisma } from "../../prisma/db.ts";
-
-interface updateReview {
-    review: {
-        id?: string,
-        title?: string,
-        date?: Date,
-        description?: string,
-        images?: string[],
-        stars?: number,
-        celebrityId?: string,
-        authorId?: string,  
-    }
-}
-
+import { prisma } from "../../prisma/db";
 export const reviewQuery = {
     getAllReviews: async () => {
         try {
@@ -21,18 +7,17 @@ export const reviewQuery = {
                     celebrity: true,
                     author: true
                 }
-            })
-        } catch (err) {
-            throw 'There was an unexpected error.'
+            });
+        }
+        catch (err) {
+            throw 'There was an unexpected error.';
         }
     }
-}
-
+};
 export const reviewMutation = {
-    createReview: async (_parent: any, args: updateReview) => {
+    createReview: async (_parent, args) => {
         try {
-            const { title, date, description, images, stars, celebrityId, authorId } = args.review
-
+            const { title, date, description, images, stars, celebrityId, authorId } = args.review;
             return await prisma.review.create({
                 data: {
                     title,
@@ -43,19 +28,17 @@ export const reviewMutation = {
                     celebrityId,
                     authorId
                 }
-            })
-        } catch (err) {
-            throw 'There was an unexpected error.'
+            });
+        }
+        catch (err) {
+            throw 'There was an unexpected error.';
         }
     },
-
-    updateReview: async (_parent: any, args: updateReview) => {
+    updateReview: async (_parent, args) => {
         try {
-            const { id, title, date, description, images, stars } = args.review
-
+            const { id, title, date, description, images, stars } = args.review;
             return await prisma.review.update({
                 where: { id },
-
                 data: {
                     title,
                     date,
@@ -63,21 +46,22 @@ export const reviewMutation = {
                     images,
                     stars,
                 }
-            })
-        } catch (err) {
-            throw 'There was an unexpected error.'
+            });
+        }
+        catch (err) {
+            throw 'There was an unexpected error.';
         }
     },
-
-    deleteReview: async (_parent: any, args: { id: string }) => {
+    deleteReview: async (_parent, args) => {
         try {
             return await prisma.review.delete({
                 where: {
                     id: args.id
                 }
-            })
-        } catch (err) {
-            throw 'There was an unexpected error.'
+            });
+        }
+        catch (err) {
+            throw 'There was an unexpected error.';
         }
     }
-}
+};

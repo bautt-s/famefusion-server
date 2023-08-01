@@ -1,18 +1,16 @@
 {
   "compilerOptions": {
-    "rootDirs": [
-      "src"
-    ],
-    "outDir": "dist",
-    "lib": [
-      "es2020"
-    ],
-    "target": "es2020",
-    "module": "esnext",
-    "moduleResolution": "node",
+    "target": "ESNext",
+    "outDir": "./dist/",
+    "rootDir": "./", 
+    "strict": false,
+    "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "types": [
-      "node"
-    ]
-  }
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "NodeNext",
+    "allowImportingTsExtensions": true,
+    "noEmit": true
+  },
+  "include": ["./src/**/*.ts", "./prisma/**/*.ts"],
+  "exclude": ["node_modules"]
 }

@@ -1,20 +1,4 @@
-import { prisma } from "../../prisma/db.ts"
-
-interface updateFan {
-    fan: {
-        id?: string,
-        name?: string,
-        email?: string,
-        location?: string,
-        age?: number,
-        interests?: string[],
-        profilePic?: string,
-        userId?: string,
-        locationVerified?: boolean,
-        fanVerified?: boolean,
-    }
-}
-
+import { prisma } from "../../prisma/db.js";
 export const fanQuery = {
     getAllFans: async () => {
         try {
@@ -23,38 +7,34 @@ export const fanQuery = {
                     reviewList: true,
                     user: true
                 }
-            })
-        } catch (err) {
-            throw 'There was an unexpected error.'
+            });
+        }
+        catch (err) {
+            throw 'There was an unexpected error.';
         }
     },
-
-    getFanById: async (_parent: any, args: { id: string }) => {
+    getFanById: async (_parent, args) => {
         try {
             const fan = await prisma.fan.findUnique({
                 where: {
                     id: args.id
                 },
-
                 include: {
                     reviewList: true,
                     user: true
                 }
-            })
-
-            return fan ?? 'Fan could not be found.'
-        } catch (err) {
-            throw 'There was an unexpected error.'
+            });
+            return fan ?? 'Fan could not be found.';
+        }
+        catch (err) {
+            throw 'There was an unexpected error.';
         }
     },
-}
-
+};
 export const fanMutation = {
-    createFan: async (_parent: any, args: updateFan) => {
+    createFan: async (_parent, args) => {
         try {
-            const { name, email, location, age, interests,
-                profilePic, userId, locationVerified, fanVerified } = args.fan
-
+            const { name, email, location, age, interests, profilePic, userId, locationVerified, fanVerified } = args.fan;
             return await prisma.fan.create({
                 data: {
                     name,
@@ -67,20 +47,17 @@ export const fanMutation = {
                     locationVerified,
                     fanVerified,
                 }
-            })
-        } catch (err) {
-            throw 'There was an unexpected error.'
+            });
+        }
+        catch (err) {
+            throw 'There was an unexpected error.';
         }
     },
-
-    updateFan: async (_parent: any, args: updateFan) => {
+    updateFan: async (_parent, args) => {
         try {
-            const { id, name, email, location, age, interests,
-                profilePic, locationVerified, fanVerified } = args.fan
-
+            const { id, name, email, location, age, interests, profilePic, locationVerified, fanVerified } = args.fan;
             return await prisma.fan.update({
                 where: { id },
-
                 data: {
                     name,
                     email,
@@ -91,21 +68,22 @@ export const fanMutation = {
                     locationVerified,
                     fanVerified,
                 }
-            })
-        } catch (err) {
-            throw 'There was an unexpected error.'
+            });
+        }
+        catch (err) {
+            throw 'There was an unexpected error.';
         }
     },
-
-    deleteFan: async (_parent: any, args: { id: string }) => {
+    deleteFan: async (_parent, args) => {
         try {
             return await prisma.fan.delete({
                 where: {
                     id: args.id
                 }
-            })
-        } catch (err) {
-            throw 'There was an unexpected error.'
+            });
+        }
+        catch (err) {
+            throw 'There was an unexpected error.';
         }
     },
-}
+};

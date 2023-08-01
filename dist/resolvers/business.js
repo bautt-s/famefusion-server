@@ -1,21 +1,4 @@
-import { prisma } from "../../prisma/db.ts"
-
-interface updateBusiness {
-    business: {
-        id?: string,
-        name?: string,
-        email?: string,
-        businessEmail?: string,
-        location?: string,
-        description?: string,
-        categories?: string[],
-        businessVerified?: boolean,
-        userId?: string,
-        images?: string[],
-        profilePic?: string
-    }
-}
-
+import { prisma } from "../../prisma/db";
 export const businessQuery = {
     getAllBusinesses: async () => {
         try {
@@ -23,37 +6,33 @@ export const businessQuery = {
                 include: {
                     associatedUser: true
                 }
-            })
-        } catch (err) {
-            throw 'There was an unexpected error.'
+            });
+        }
+        catch (err) {
+            throw 'There was an unexpected error.';
         }
     },
-
-    getBusinessById: async (_parent: any, args: { id: string }) => {
+    getBusinessById: async (_parent, args) => {
         try {
             const business = await prisma.business.findUnique({
                 where: {
                     id: args.id
                 },
-
                 include: {
                     associatedUser: true
                 }
-            })
-
-            return business ?? 'Business could not be found.'
-        } catch (err) {
-            throw 'There was an unexpected error.'
+            });
+            return business ?? 'Business could not be found.';
+        }
+        catch (err) {
+            throw 'There was an unexpected error.';
         }
     },
-}
-
+};
 export const businessMutation = {
-    createBusiness: async (_parent: any, args: updateBusiness) => {
+    createBusiness: async (_parent, args) => {
         try {
-            const { name, email, location, businessEmail, description, categories,
-                businessVerified, userId, images, profilePic } = args.business
-
+            const { name, email, location, businessEmail, description, categories, businessVerified, userId, images, profilePic } = args.business;
             return await prisma.business.create({
                 data: {
                     name,
@@ -67,20 +46,17 @@ export const businessMutation = {
                     images,
                     profilePic,
                 }
-            })
-        } catch (err) {
-            throw 'There was an unexpected error.'
+            });
+        }
+        catch (err) {
+            throw 'There was an unexpected error.';
         }
     },
-
-    updateBusiness: async (_parent: any, args: updateBusiness) => {
+    updateBusiness: async (_parent, args) => {
         try {
-            const { id, name, email, location, businessEmail, description,
-                categories, businessVerified, images, profilePic } = args.business
-
+            const { id, name, email, location, businessEmail, description, categories, businessVerified, images, profilePic } = args.business;
             return await prisma.business.update({
                 where: { id },
-
                 data: {
                     name,
                     email,
@@ -92,21 +68,22 @@ export const businessMutation = {
                     images,
                     profilePic,
                 }
-            })
-        } catch (err) {
-            throw 'There was an unexpected error.'
+            });
+        }
+        catch (err) {
+            throw 'There was an unexpected error.';
         }
     },
-
-    deleteBusiness: async (_parent: any, args: { id: string }) => {
+    deleteBusiness: async (_parent, args) => {
         try {
             return await prisma.business.delete({
                 where: {
                     id: args.id
                 }
-            })
-        } catch (err) {
-            throw 'There was an unexpected error.'
+            });
+        }
+        catch (err) {
+            throw 'There was an unexpected error.';
         }
     },
-}
+};

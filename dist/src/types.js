@@ -1,6 +1,5 @@
-import { gql } from 'graphql-tag'
-
-export const typeDefs = gql`
+import { gql } from 'graphql-tag';
+export const typeDefs = gql `
         enum Role {
             User
             Admin
@@ -142,13 +141,6 @@ export const typeDefs = gql`
             opportunities: [String]
         }
 
-        input UserInput {
-            id: String
-            name: String
-            email: String
-            role: Role
-        }
-
         input CelebrityInput {
             id: String
             name: String
@@ -227,9 +219,6 @@ export const typeDefs = gql`
         }
 
         type Query {
-            getAllUsers: [User]
-            getUserById(id: argsId): User
-
             getAllCelebrities(name: argsName): [Celebrity]
             getCelebrityById(id: argsId): Celebrity
             getFilteredCelebrities(filter: DataFilter): [Celebrity]
@@ -244,10 +233,6 @@ export const typeDefs = gql`
         }
 
         type Mutation {
-            createUser(celebrity: UserInput): User
-            updateUser(celebrity: UserInput): User
-            deleteUser(id: argsId): User
-
             createCelebrity(celebrity: CelebrityInput): Celebrity
             updateCelebrity(celebrity: CelebrityInput): Celebrity
             deleteCelebrity(id: argsId): Celebrity
@@ -270,4 +255,4 @@ export const typeDefs = gql`
             updateWork(work: WorkInput): Work
             deleteWork(id: argsId): Work
         }
-`
+`;

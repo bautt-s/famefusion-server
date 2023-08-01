@@ -6,8 +6,10 @@ import { fanQuery, fanMutation } from './resolvers/fan.js';
 import { businessMutation, businessQuery } from './resolvers/business.js';
 import { reviewMutation, reviewQuery } from './resolvers/review.js';
 import { workMutation } from './resolvers/work.js';
+import { resolverMap } from './resolvers/date.js';
 (async function () {
     const resolvers = {
+        Date: resolverMap,
         Query: {
             ...celebrityQuery,
             ...fanQuery,

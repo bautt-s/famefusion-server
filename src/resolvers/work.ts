@@ -1,16 +1,16 @@
-import { prisma } from "../../prisma/db"
+import { prisma } from "../../prisma/db.ts"
 
 interface updateWork {
     work: {
-        id: string
-        title: string
-        type: string
-        price: number
-        description: string
-        duration: string
-        online: boolean
-        collaboration: boolean
-        celebrityId: string
+        id?: string,
+        title?: string,
+        type?: string,
+        price?: number,
+        description?: string,
+        duration?: string,
+        online?: boolean,
+        collaboration?: boolean,
+        celebrityId?: string,
     }
 }
 
