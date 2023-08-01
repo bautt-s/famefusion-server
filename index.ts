@@ -2,15 +2,26 @@ import { ApolloServer } from '@apollo/server'
 import { startStandaloneServer } from '@apollo/server/standalone'
 import { typeDefs } from './src/types.js'
 import { celebrityMutation, celebrityQuery } from './src/resolvers/celebrity.js'
+import { fanQuery, fanMutation } from './src/resolvers/fan.js'
+import { businessMutation, businessQuery } from './src/resolvers/business.js'
+import { reviewMutation, reviewQuery } from './src/resolvers/review.js'
+import { workMutation } from './src/resolvers/work.js'
 
 ( async function () {
     const resolvers = {
         Query: {
-            ...celebrityQuery
+            ...celebrityQuery,
+            ...fanQuery,
+            ...businessQuery,
+            ...reviewQuery
         },
 
         Mutation: {
-            ...celebrityMutation
+            ...celebrityMutation,
+            ...fanMutation,
+            ...businessMutation,
+            ...reviewMutation,
+            ...workMutation
         }
     }
 

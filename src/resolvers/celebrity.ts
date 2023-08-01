@@ -1,36 +1,47 @@
 import { prisma } from "../../prisma/db";
 
 interface filterArgs {
-    location: string
-    price: [number, number]
-    availability: [Date, Date]
-    ageGroup: [number, number]
-    gender: string[],
-    languages: string[],
-    interests: string[],
-    opportunities: string[],
+    filter: {
+        location?: string
+        price?: [number, number]
+        availability?: [Date, Date]
+        ageGroup?: [number, number]
+        gender?: string[],
+        languages?: string[],
+        interests?: string[],
+        opportunities?: string[],
+    }
 }
 
 interface createArgs {
-    id?: string,
-    name: string,
-    email: string,
-    location: string,
-    nickname: string,
-    biography: string,
-    description: string,
-    associatedBrands: string[],
-    categories: string[],
-    age: number,
-    gender: string,
-    languages: string[],
-    interests: string[],
-    media: string[],
-    rating?: number,
-    profilePic?: string,
-    userId: string
-    locationVerified?: boolean,
-    celebrityVerified?: boolean
+    celebrity: {
+        id?: string,
+        name?: string,
+        email?: string,
+        location?: string,
+        nickname?: string,
+        biography?: string,
+        description?: string,
+        associatedBrands?: string[],
+        categories?: string[],
+        age?: number,
+        gender?: string,
+        languages?: string[],
+        interests?: string[],
+        media?: string[],
+        rating?: number,
+        profilePic?: string,
+        userId?: string
+        locationVerified?: boolean,
+        celebrityVerified?: boolean
+    }
+}
+
+interface createDay {
+    day: { 
+        date?: Date, 
+        celebrityId?: string 
+    }
 }
 
 export const celebrityQuery = {
@@ -81,22 +92,22 @@ export const celebrityQuery = {
             const celebrities = await prisma.celebrity.findMany({
                 where: {
                     languages: {
-                        hasSome: args.languages
+                        hasSome: args.filter.languages
                     },
 
                     interests: {
-                        hasSome: args.interests
+                        hasSome: args.filter.interests
                     },
 
                     gender: {
-                        in: args.gender
+                        in: args.filter.gender
                     },
 
                     availableDays: {
                         some: {
                             date: {
-                                gte: args.availability[0],
-                                lte: args.availability[1]
+                                gte: args.filter.availability[0],
+                                lte: args.filter.availability[1]
                             }
                         }
                     },
@@ -104,22 +115,22 @@ export const celebrityQuery = {
                     workList: {
                         some: {
                             type: {
-                                in: args.opportunities
+                                in: args.filter.opportunities
                             },
 
                             price: {
-                                gte: args.price[0],
-                                lte: args.price[1]
+                                gte: args.filter.price[0],
+                                lte: args.filter.price[1]
                             }
                         }
                     },
 
                     age: {
-                        gte: args.ageGroup[0],
-                        lte: args.ageGroup[1]
+                        gte: args.filter.ageGroup[0],
+                        lte: args.filter.ageGroup[1]
                     },
 
-                    location: args.location
+                    location: args.filter.location
                 },
 
                 orderBy: {
@@ -161,7 +172,7 @@ export const celebrityMutation = {
                 rating,
                 profilePic,
                 userId
-            } = args;
+            } = args.celebrity;
 
             return await prisma.celebrity.create({
                 data: {
@@ -188,7 +199,7 @@ export const celebrityMutation = {
         }
     },
 
-    editCelebrity: async (_parent: any, args: createArgs) => {
+    updateCelebrity: async (_parent: any, args: createArgs) => {
         try {
             const {
                 id,
@@ -210,7 +221,7 @@ export const celebrityMutation = {
                 userId,
                 locationVerified,
                 celebrityVerified
-            } = args;
+            } = args.celebrity;
 
             return await prisma.celebrity.update({
                 where: { id },
@@ -234,6 +245,36 @@ export const celebrityMutation = {
                     userId,
                     locationVerified,
                     celebrityVerified
+                }
+            })
+        } catch (err) {
+            throw 'There was an unexpected error.'
+        }
+    },
+
+    createDay: async (_parent: any, args: createDay) => {
+        try {
+            const { date, celebrityId } = args.day
+
+            return await prisma.day.create({
+                data: {
+                    id: celebrityId+'-'+date.toDateString(),
+                    date,
+                    celebrityId
+                }
+            })
+        } catch (err) {
+            throw 'There was an unexpected error.'
+        }
+    },
+
+    deleteDay: async (_parent: any, args: { date: Date, celebrityId: string }) => {
+        try {
+            const { date, celebrityId } = args
+
+            return await prisma.day.delete({
+                where: {
+                    id: celebrityId+'-'+date.toDateString()
                 }
             })
         } catch (err) {

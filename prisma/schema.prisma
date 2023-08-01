@@ -114,9 +114,9 @@ model Review {
 }
 
 model Day {
-  id            Int       @id @map("_id") 
-  celebrity     Celebrity @relation(fields: [celebrityId], references: [id])
-  celebrityId   String    @db.ObjectId
+  id            String      @id @map("_id") 
+  celebrity     Celebrity   @relation(fields: [celebrityId], references: [id], onDelete: Cascade)
+  celebrityId   String      @db.ObjectId @unique
   date          DateTime
 }
 
