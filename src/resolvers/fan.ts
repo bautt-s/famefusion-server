@@ -1,4 +1,4 @@
-import { prisma } from "../../prisma/db.ts"
+import { prisma } from "../../prisma/db.js"
 
 interface updateFan {
     fan: {
@@ -25,7 +25,7 @@ export const fanQuery = {
                 }
             })
         } catch (err) {
-            throw 'There was an unexpected error.'
+            throw { err }
         }
     },
 
@@ -44,14 +44,16 @@ export const fanQuery = {
 
             return fan ?? 'Fan could not be found.'
         } catch (err) {
-            throw 'There was an unexpected error.'
+            throw { err }
         }
     },
 }
 
 export const fanMutation = {
-    createFan: async (_parent: any, args: updateFan) => {
+    createFan: async (_parent: any, args: updateFan, context: any) => {
         try {
+            if (!context.user) throw 'USER_NOT_AUTHENTICATED'
+
             const { name, email, location, age, interests,
                 profilePic, userId, locationVerified, fanVerified } = args.fan
 
@@ -69,7 +71,7 @@ export const fanMutation = {
                 }
             })
         } catch (err) {
-            throw 'There was an unexpected error.'
+            throw { err }
         }
     },
 
@@ -93,7 +95,7 @@ export const fanMutation = {
                 }
             })
         } catch (err) {
-            throw 'There was an unexpected error.'
+            throw { err }
         }
     },
 
@@ -105,7 +107,7 @@ export const fanMutation = {
                 }
             })
         } catch (err) {
-            throw 'There was an unexpected error.'
+            throw { err }
         }
     },
 }

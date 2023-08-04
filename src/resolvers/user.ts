@@ -1,4 +1,4 @@
-import { prisma } from '../../prisma/db.ts'
+import { prisma } from '../../prisma/db.js'
 
 interface updateUser {
     user: {
@@ -14,19 +14,21 @@ export const userQuery = {
         try {
             return await prisma.user.findMany({})
         } catch (err) {
-            throw 'There was an unexpected error.'
+            throw { err }
         }
     },
 
-    getUserById: async (_parent, args: { id: string }) => {
+    getUserById: async (_parent: any, args: { id: string }, context: any) => {
         try {
+            if (!context.user) throw 'USER_NOT_AUTHENTICATED'
+
             return await prisma.user.findUnique({
                 where: {
                     id: args.id
                 }
             })
         } catch (err) {
-            throw 'There was an unexpected error.'
+            throw { err }
         }
     }
 }
@@ -35,7 +37,7 @@ export const userMutation = {
     createUser: async (_parent: any, args: updateUser) => {
         try {
             const { name, email, role } = args.user
-
+            console.log(name)
             return await prisma.user.create({
                 data: {
                     name,
@@ -44,7 +46,7 @@ export const userMutation = {
                 }
             })
         } catch (err) {
-            throw 'There was an unexpected error.'
+            throw { err }
         }
     },
 
@@ -62,7 +64,7 @@ export const userMutation = {
                 }
             })
         } catch (err) {
-            throw 'There was an unexpected error.'
+            throw { err }
         }
     },
 
@@ -74,7 +76,7 @@ export const userMutation = {
                 }
             })
         } catch (err) {
-            throw 'There was an unexpected error.'
+            throw { err }
         }
     }
 }   

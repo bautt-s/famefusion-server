@@ -1,4 +1,4 @@
-import { prisma } from "../../prisma/db.ts"
+import { prisma } from "../../prisma/db.js"
 
 interface updateWork {
     work: {
@@ -33,7 +33,7 @@ export const workMutation = {
                 }
             })
         } catch (err) {
-            throw 'There was an unexpected error.'
+            throw { err }
         }
     },
 
@@ -58,7 +58,7 @@ export const workMutation = {
                 }
             })
         } catch (err) {
-            throw 'There was an unexpected error.'
+            throw { err }
         }
     },
 
@@ -70,7 +70,7 @@ export const workMutation = {
                 }
             })
         } catch (err) {
-            throw 'There was an unexpected error.'
+            throw { err }
         }
     }
 }

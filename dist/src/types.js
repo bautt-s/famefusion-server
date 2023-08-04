@@ -141,6 +141,13 @@ export const typeDefs = gql `
             opportunities: [String]
         }
 
+        input UserInput {
+            id: String
+            name: String!
+            email: String!
+            role: Role
+        }
+
         input CelebrityInput {
             id: String
             name: String
@@ -219,6 +226,9 @@ export const typeDefs = gql `
         }
 
         type Query {
+            getAllUsers: [User]
+            getUserById(id: argsId): User
+
             getAllCelebrities(name: argsName): [Celebrity]
             getCelebrityById(id: argsId): Celebrity
             getFilteredCelebrities(filter: DataFilter): [Celebrity]
@@ -233,6 +243,10 @@ export const typeDefs = gql `
         }
 
         type Mutation {
+            createUser(user: UserInput): User
+            updateUser(user: UserInput): User
+            deleteUser(id: argsId): User
+
             createCelebrity(celebrity: CelebrityInput): Celebrity
             updateCelebrity(celebrity: CelebrityInput): Celebrity
             deleteCelebrity(id: argsId): Celebrity

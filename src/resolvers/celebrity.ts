@@ -1,4 +1,4 @@
-import { prisma } from "../../prisma/db.ts";
+import { prisma } from "../../prisma/db.js";
 
 interface filterArgs {
     filter: {
@@ -69,7 +69,7 @@ export const celebrityQuery = {
             if (celebrities.length) return celebrities
             else 'Could not find any celebrities.'
         } catch (err) {
-            throw 'There was an unexpected error.'
+            throw { err }
         }
     },
 
@@ -83,7 +83,7 @@ export const celebrityQuery = {
 
             return celebrity ?? 'Could not find celebrity.'
         } catch (err) {
-            throw 'There was an unexpected error.'
+            throw { err }
         }
     },
 
@@ -147,14 +147,16 @@ export const celebrityQuery = {
             if (celebrities.length) return celebrities
             else 'Could not find any celebrities.'
         } catch (err) {
-            throw 'There was an unexpected error.'
+            throw { err }
         }
     }
 }
 
 export const celebrityMutation = {
-    createCelebrity: async (_parent: any, args: createArgs) => {
+    createCelebrity: async (_parent: any, args: createArgs, context: any) => {
         try {
+            if (!context.user) throw 'USER_NOT_AUTHENTICATED'
+
             const {
                 name,
                 email,
@@ -195,7 +197,7 @@ export const celebrityMutation = {
                 }
             })
         } catch (err) {
-            throw 'There was an unexpected error.'
+            throw { err }
         }
     },
 
@@ -248,7 +250,7 @@ export const celebrityMutation = {
                 }
             })
         } catch (err) {
-            throw 'There was an unexpected error.'
+            throw { err }
         }
     },
 
@@ -264,7 +266,7 @@ export const celebrityMutation = {
                 }
             })
         } catch (err) {
-            throw 'There was an unexpected error.'
+            throw { err }
         }
     },
 
@@ -278,7 +280,7 @@ export const celebrityMutation = {
                 }
             })
         } catch (err) {
-            throw 'There was an unexpected error.'
+            throw { err }
         }
     },
 
@@ -290,7 +292,7 @@ export const celebrityMutation = {
                 where: { id }
             })
         } catch (err) {
-            throw 'There was an unexpected error.'
+            throw { err }
         }
     }
 }

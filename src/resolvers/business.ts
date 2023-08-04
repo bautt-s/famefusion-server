@@ -1,4 +1,4 @@
-import { prisma } from "../../prisma/db.ts"
+import { prisma } from "../../prisma/db.js"
 
 interface updateBusiness {
     business: {
@@ -25,7 +25,7 @@ export const businessQuery = {
                 }
             })
         } catch (err) {
-            throw 'There was an unexpected error.'
+            throw { err }
         }
     },
 
@@ -43,14 +43,16 @@ export const businessQuery = {
 
             return business ?? 'Business could not be found.'
         } catch (err) {
-            throw 'There was an unexpected error.'
+            throw { err }
         }
     },
 }
 
 export const businessMutation = {
-    createBusiness: async (_parent: any, args: updateBusiness) => {
+    createBusiness: async (_parent: any, args: updateBusiness, context: any) => {
         try {
+            if (!context.user) throw 'USER_NOT_AUTHENTICATED'
+
             const { name, email, location, businessEmail, description, categories,
                 businessVerified, userId, images, profilePic } = args.business
 
@@ -69,7 +71,7 @@ export const businessMutation = {
                 }
             })
         } catch (err) {
-            throw 'There was an unexpected error.'
+            throw { err }
         }
     },
 
@@ -94,7 +96,7 @@ export const businessMutation = {
                 }
             })
         } catch (err) {
-            throw 'There was an unexpected error.'
+            throw { err }
         }
     },
 
@@ -106,7 +108,7 @@ export const businessMutation = {
                 }
             })
         } catch (err) {
-            throw 'There was an unexpected error.'
+            throw { err }
         }
     },
 }

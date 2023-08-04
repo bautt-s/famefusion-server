@@ -1,4 +1,4 @@
-import { prisma } from "../../prisma/db.ts";
+import { prisma } from "../../prisma/db.js";
 
 interface updateReview {
     review: {
@@ -23,7 +23,7 @@ export const reviewQuery = {
                 }
             })
         } catch (err) {
-            throw 'There was an unexpected error.'
+            throw { err }
         }
     }
 }
@@ -45,7 +45,7 @@ export const reviewMutation = {
                 }
             })
         } catch (err) {
-            throw 'There was an unexpected error.'
+            throw { err }
         }
     },
 
@@ -65,7 +65,7 @@ export const reviewMutation = {
                 }
             })
         } catch (err) {
-            throw 'There was an unexpected error.'
+            throw { err }
         }
     },
 
@@ -77,7 +77,7 @@ export const reviewMutation = {
                 }
             })
         } catch (err) {
-            throw 'There was an unexpected error.'
+            throw { err }
         }
     }
 }

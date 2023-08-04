@@ -7,16 +7,19 @@ import { businessMutation, businessQuery } from './resolvers/business.js';
 import { reviewMutation, reviewQuery } from './resolvers/review.js';
 import { workMutation } from './resolvers/work.js';
 import { resolverMap } from './resolvers/date.js';
+import { userMutation, userQuery } from './resolvers/user.js';
 (async function () {
     const resolvers = {
         Date: resolverMap,
         Query: {
+            ...userQuery,
             ...celebrityQuery,
             ...fanQuery,
             ...businessQuery,
             ...reviewQuery
         },
         Mutation: {
+            ...userMutation,
             ...celebrityMutation,
             ...fanMutation,
             ...businessMutation,

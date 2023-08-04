@@ -144,8 +144,8 @@ export const typeDefs = gql`
 
         input UserInput {
             id: String
-            name: String
-            email: String
+            name: String!
+            email: String!
             role: Role
         }
 
@@ -244,8 +244,8 @@ export const typeDefs = gql`
         }
 
         type Mutation {
-            createUser(celebrity: UserInput): User
-            updateUser(celebrity: UserInput): User
+            createUser(user: UserInput): User
+            updateUser(user: UserInput): User
             deleteUser(id: argsId): User
 
             createCelebrity(celebrity: CelebrityInput): Celebrity
