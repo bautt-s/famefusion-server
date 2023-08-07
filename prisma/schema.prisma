@@ -54,6 +54,7 @@ model Celebrity {
   // need to see what to do with social networks
   celebrityVerified   Boolean @default(false)
   media               String[]
+  video               String
   rating              Int?
   profilePic          String?
   availableDays       Day[]
@@ -101,7 +102,7 @@ model Work {
 model Review {
   id                  String @id @default(uuid()) @map("_id") 
   title               String
-  date                DateTime
+  date                DateTime @default(now())
   description         String
   images              String[]
   stars               Float

@@ -10,7 +10,7 @@ export const reviewQuery = {
             });
         }
         catch (err) {
-            throw 'There was an unexpected error.';
+            throw { err };
         }
     }
 };
@@ -31,7 +31,7 @@ export const reviewMutation = {
             });
         }
         catch (err) {
-            throw 'There was an unexpected error.';
+            throw { err };
         }
     },
     updateReview: async (_parent, args) => {
@@ -49,7 +49,7 @@ export const reviewMutation = {
             });
         }
         catch (err) {
-            throw 'There was an unexpected error.';
+            throw { err };
         }
     },
     deleteReview: async (_parent, args) => {
@@ -61,7 +61,7 @@ export const reviewMutation = {
             });
         }
         catch (err) {
-            throw 'There was an unexpected error.';
+            throw { err };
         }
     }
 };

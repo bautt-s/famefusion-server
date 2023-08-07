@@ -29,6 +29,7 @@ interface createArgs {
         languages?: string[],
         interests?: string[],
         media?: string[],
+        video?: string,
         rating?: number,
         profilePic?: string,
         userId?: string
@@ -60,7 +61,11 @@ export const celebrityQuery = {
                 },
 
                 include: {
-                    workList: true,
+                    workList: {
+                        orderBy: { 
+                            price: 'asc' 
+                        }
+                    },
                     associatedUser: true,
                     reviewList: true,
                 }
@@ -78,6 +83,16 @@ export const celebrityQuery = {
             const celebrity = await prisma.celebrity.findUnique({
                 where: {
                     id: args.id
+                },
+
+                include: {
+                    workList: {
+                        orderBy: { 
+                            price: 'asc' 
+                        }
+                    },
+                    associatedUser: true,
+                    reviewList: true,
                 }
             })
 
@@ -138,7 +153,11 @@ export const celebrityQuery = {
                 },
 
                 include: {
-                    workList: true,
+                    workList: {
+                        orderBy: { 
+                            price: 'asc' 
+                        }
+                    },
                     associatedUser: true,
                     reviewList: true,
                 }
@@ -149,13 +168,13 @@ export const celebrityQuery = {
         } catch (err) {
             throw { err }
         }
-    }
+    },
 }
 
 export const celebrityMutation = {
     createCelebrity: async (_parent: any, args: createArgs, context: any) => {
         try {
-            if (!context.user) throw 'USER_NOT_AUTHENTICATED'
+            //if (!context.user) throw 'USER_NOT_AUTHENTICATED'
 
             const {
                 name,
@@ -171,6 +190,7 @@ export const celebrityMutation = {
                 languages,
                 interests,
                 media,
+                video,
                 rating,
                 profilePic,
                 userId
@@ -191,6 +211,7 @@ export const celebrityMutation = {
                     languages,
                     interests,
                     media,
+                    video,
                     rating,
                     profilePic,
                     userId
@@ -218,6 +239,7 @@ export const celebrityMutation = {
                 languages,
                 interests,
                 media,
+                video,
                 rating,
                 profilePic,
                 userId,
@@ -242,6 +264,7 @@ export const celebrityMutation = {
                     languages,
                     interests,
                     media,
+                    video,
                     rating,
                     profilePic,
                     userId,

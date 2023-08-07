@@ -9,7 +9,7 @@ export const businessQuery = {
             });
         }
         catch (err) {
-            throw 'There was an unexpected error.';
+            throw { err };
         }
     },
     getBusinessById: async (_parent, args) => {
@@ -25,13 +25,15 @@ export const businessQuery = {
             return business ?? 'Business could not be found.';
         }
         catch (err) {
-            throw 'There was an unexpected error.';
+            throw { err };
         }
     },
 };
 export const businessMutation = {
-    createBusiness: async (_parent, args) => {
+    createBusiness: async (_parent, args, context) => {
         try {
+            if (!context.user)
+                throw 'USER_NOT_AUTHENTICATED';
             const { name, email, location, businessEmail, description, categories, businessVerified, userId, images, profilePic } = args.business;
             return await prisma.business.create({
                 data: {
@@ -49,7 +51,7 @@ export const businessMutation = {
             });
         }
         catch (err) {
-            throw 'There was an unexpected error.';
+            throw { err };
         }
     },
     updateBusiness: async (_parent, args) => {
@@ -71,7 +73,7 @@ export const businessMutation = {
             });
         }
         catch (err) {
-            throw 'There was an unexpected error.';
+            throw { err };
         }
     },
     deleteBusiness: async (_parent, args) => {
@@ -83,7 +85,7 @@ export const businessMutation = {
             });
         }
         catch (err) {
-            throw 'There was an unexpected error.';
+            throw { err };
         }
     },
 };

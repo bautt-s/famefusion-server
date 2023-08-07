@@ -13,7 +13,11 @@ export const celebrityQuery = {
                     name: "asc"
                 },
                 include: {
-                    workList: true,
+                    workList: {
+                        orderBy: {
+                            price: 'asc'
+                        }
+                    },
                     associatedUser: true,
                     reviewList: true,
                 }
@@ -24,7 +28,7 @@ export const celebrityQuery = {
                 'Could not find any celebrities.';
         }
         catch (err) {
-            throw 'There was an unexpected error.';
+            throw { err };
         }
     },
     getCelebrityById: async (_parent, args) => {
@@ -32,12 +36,21 @@ export const celebrityQuery = {
             const celebrity = await prisma.celebrity.findUnique({
                 where: {
                     id: args.id
+                },
+                include: {
+                    workList: {
+                        orderBy: {
+                            price: 'asc'
+                        }
+                    },
+                    associatedUser: true,
+                    reviewList: true,
                 }
             });
             return celebrity ?? 'Could not find celebrity.';
         }
         catch (err) {
-            throw 'There was an unexpected error.';
+            throw { err };
         }
     },
     getFilteredCelebrities: async (_parent, args) => {
@@ -82,7 +95,11 @@ export const celebrityQuery = {
                     name: "asc"
                 },
                 include: {
-                    workList: true,
+                    workList: {
+                        orderBy: {
+                            price: 'asc'
+                        }
+                    },
                     associatedUser: true,
                     reviewList: true,
                 }
@@ -93,14 +110,15 @@ export const celebrityQuery = {
                 'Could not find any celebrities.';
         }
         catch (err) {
-            throw 'There was an unexpected error.';
+            throw { err };
         }
-    }
+    },
 };
 export const celebrityMutation = {
-    createCelebrity: async (_parent, args) => {
+    createCelebrity: async (_parent, args, context) => {
         try {
-            const { name, email, location, nickname, biography, description, associatedBrands, categories, age, gender, languages, interests, media, rating, profilePic, userId } = args.celebrity;
+            //if (!context.user) throw 'USER_NOT_AUTHENTICATED'
+            const { name, email, location, nickname, biography, description, associatedBrands, categories, age, gender, languages, interests, media, video, rating, profilePic, userId } = args.celebrity;
             return await prisma.celebrity.create({
                 data: {
                     name,
@@ -116,6 +134,7 @@ export const celebrityMutation = {
                     languages,
                     interests,
                     media,
+                    video,
                     rating,
                     profilePic,
                     userId
@@ -123,12 +142,12 @@ export const celebrityMutation = {
             });
         }
         catch (err) {
-            throw 'There was an unexpected error.';
+            throw { err };
         }
     },
     updateCelebrity: async (_parent, args) => {
         try {
-            const { id, name, email, location, nickname, biography, description, associatedBrands, categories, age, gender, languages, interests, media, rating, profilePic, userId, locationVerified, celebrityVerified } = args.celebrity;
+            const { id, name, email, location, nickname, biography, description, associatedBrands, categories, age, gender, languages, interests, media, video, rating, profilePic, userId, locationVerified, celebrityVerified } = args.celebrity;
             return await prisma.celebrity.update({
                 where: { id },
                 data: {
@@ -145,6 +164,7 @@ export const celebrityMutation = {
                     languages,
                     interests,
                     media,
+                    video,
                     rating,
                     profilePic,
                     userId,
@@ -154,7 +174,7 @@ export const celebrityMutation = {
             });
         }
         catch (err) {
-            throw 'There was an unexpected error.';
+            throw { err };
         }
     },
     createDay: async (_parent, args) => {
@@ -169,7 +189,7 @@ export const celebrityMutation = {
             });
         }
         catch (err) {
-            throw 'There was an unexpected error.';
+            throw { err };
         }
     },
     deleteDay: async (_parent, args) => {
@@ -182,7 +202,7 @@ export const celebrityMutation = {
             });
         }
         catch (err) {
-            throw 'There was an unexpected error.';
+            throw { err };
         }
     },
     deleteCelebrity: (_parent, args) => {
@@ -193,7 +213,7 @@ export const celebrityMutation = {
             });
         }
         catch (err) {
-            throw 'There was an unexpected error.';
+            throw { err };
         }
     }
 };

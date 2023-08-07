@@ -38,6 +38,7 @@ export const typeDefs = gql `
             languages: [String]
             interests: [String]
             media: [String]
+            video: String
             rating: Float
             profilePic: String
             userId: String
@@ -163,6 +164,7 @@ export const typeDefs = gql `
             languages: [String]
             interests: [String]
             media: [String]
+            video: String
             rating: Float
             profilePic: String
             userId: String
@@ -212,6 +214,7 @@ export const typeDefs = gql `
         input ReviewInput {
             id: String,
             title: String,
+            type: String,
             date: Date,
             description: String,
             images: [String],

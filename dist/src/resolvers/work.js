@@ -17,7 +17,7 @@ export const workMutation = {
             });
         }
         catch (err) {
-            throw 'There was an unexpected error.';
+            throw { err };
         }
     },
     updateWork: async (_parent, args) => {
@@ -39,7 +39,7 @@ export const workMutation = {
             });
         }
         catch (err) {
-            throw 'There was an unexpected error.';
+            throw { err };
         }
     },
     deleteWork: async (_parent, args) => {
@@ -51,7 +51,7 @@ export const workMutation = {
             });
         }
         catch (err) {
-            throw 'There was an unexpected error.';
+            throw { err };
         }
     }
 };

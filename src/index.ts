@@ -41,7 +41,7 @@ import { userMutation, userQuery } from './resolvers/user.js'
 
     const { url } = await startStandaloneServer(server, {
         listen: { port: 3001 },
-        context: async ({ req }) => {
+        /*context: async ({ req }) => {
             // auth check on every request
             const user = await new Promise((resolve, reject) => {
                 authorize(req, (err: any, user: any) => {
@@ -55,7 +55,7 @@ import { userMutation, userQuery } from './resolvers/user.js'
             return {
                 user
             };
-        }
+        }*/
     })
 
     console.log('Server listening at ' + url)
