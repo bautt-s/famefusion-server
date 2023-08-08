@@ -50,6 +50,7 @@ export const celebrityQuery = {
             return celebrity ?? 'Could not find celebrity.';
         }
         catch (err) {
+            console.log(err);
             throw { err };
         }
     },

@@ -123,14 +123,6 @@ export const typeDefs = gql `
             date: Date
         }
 
-        input argsName {
-            name: String
-        }
-
-        input argsId {
-            id: String
-        }
-
         input DataFilter {
             location: String
             price: [Int]
@@ -230,17 +222,17 @@ export const typeDefs = gql `
 
         type Query {
             getAllUsers: [User]
-            getUserById(id: argsId): User
+            getUserById(id: String): User
 
-            getAllCelebrities(name: argsName): [Celebrity]
-            getCelebrityById(id: argsId): Celebrity
+            getAllCelebrities(name: String): [Celebrity]
+            getCelebrityById(id: String): Celebrity
             getFilteredCelebrities(filter: DataFilter): [Celebrity]
 
             getAllFans: [Fan]
-            getFanById(id: argsId): Fan
+            getFanById(id: String): Fan
 
             getAllBusinesses: [Business]
-            getBusinessById(id: argsId): Business
+            getBusinessById(id: String): Business
 
             getAllReviews: [Review]
         }
@@ -248,28 +240,28 @@ export const typeDefs = gql `
         type Mutation {
             createUser(user: UserInput): User
             updateUser(user: UserInput): User
-            deleteUser(id: argsId): User
+            deleteUser(id: String): User
 
             createCelebrity(celebrity: CelebrityInput): Celebrity
             updateCelebrity(celebrity: CelebrityInput): Celebrity
-            deleteCelebrity(id: argsId): Celebrity
+            deleteCelebrity(id: String): Celebrity
             createDay(day: DayInput): Day
             deleteDay(day: DayInput): Day
 
             createFan(fan: FanInput): Fan
             updateFan(fan: FanInput): Fan
-            deleteFan(id: argsId): Fan
+            deleteFan(id: String): Fan
 
             createBusiness(business: BusinessInput): Business
             updateBusiness(business: BusinessInput): Business
-            deleteBusiness(id: argsId): Business
+            deleteBusiness(id: String): Business
 
             createReview(review: ReviewInput): Review
             updateReview(review: ReviewInput): Review
-            deleteReview(id: argsId): Review
+            deleteReview(id: String): Review
 
             createWork(work: WorkInput): Work
             updateWork(work: WorkInput): Work
-            deleteWork(id: argsId): Work
+            deleteWork(id: String): Work
         }
 `;
