@@ -5,9 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "npm install",
-    "start": "node ./dist/src/index.js"
-
+    "run build": "npm install && npx tsc",
+    "start": "node ./dist/src/index.js",
+    "dev": "npx tsc && node ./dist/index.js"
   },
   "keywords": [],
   "author": "Bautista Sánchez",
