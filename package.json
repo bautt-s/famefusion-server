@@ -14,7 +14,7 @@
   "scripts": {
     "build": "npm install && tsc",
     "start": "node ./dist/src/index.js",
-    "dev": "npm run compile && node ./dist/src/index.js"
+    "dev": "npx tsc && node ./dist/index.js"
   },
   "keywords": [],
   "author": "",
