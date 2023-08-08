@@ -1,5 +1,5 @@
 import { ApolloServer } from '@apollo/server'
-
+import { kindeNode } from '@kinde-oss/kinde-node'
 import { startStandaloneServer } from '@apollo/server/standalone'
 import { typeDefs } from './src/types.js'
 import { celebrityMutation, celebrityQuery } from './src/resolvers/celebrity.js'
@@ -11,7 +11,7 @@ import { resolverMap } from './src/resolvers/date.js'
 import { userMutation, userQuery } from './src/resolvers/user.js'
 
 (async function () {
-    //const authorize = await kindeNode(process.env.KINDE_DOMAIN)
+    const authorize = await kindeNode(process.env.KINDE_DOMAIN)
 
     const resolvers = {
         Date: resolverMap,
