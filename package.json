@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "build": "npm install",
-    "start": "node ./dist/src/index.js",
-    "dev": "npx tsc && node ./dist/index.js"
+    "start": "node ./dist/src/index.js"
+
   },
   "keywords": [],
   "author": "Bautista Sánchez",
