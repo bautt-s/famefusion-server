@@ -12,9 +12,8 @@
     "typescript": "^5.1.6"
   },
   "scripts": {
-    "start": "npm run compile && node ./dist/src/index.js",
-    "dev": "nodemon ./dist/index.js",
-    "build": "npm install && npx tsc"
+    "start": "npm install && npx tsc && npm run compile && node ./dist/src/index.js",
+    "dev": "npm run compile && node ./dist/src/index.js",
   },
   "keywords": [],
   "author": "",
