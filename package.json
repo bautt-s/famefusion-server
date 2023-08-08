@@ -5,12 +5,12 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "npm install && npx tsc",
+    "build": "npm install",
     "start": "node ./dist/src/index.js",
     "dev": "npx tsc && node ./dist/index.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Bautista Sánchez",
   "license": "ISC",
   "dependencies": {
     "@apollo/server": "^4.9.0",
