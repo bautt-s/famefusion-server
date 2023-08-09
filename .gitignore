@@ -13,7 +13,7 @@ package-lock.json
 /build
 
 # compile
-
+/dist
 
 # misc
 .DS_Store
