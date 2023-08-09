@@ -74,6 +74,7 @@ export const celebrityQuery = {
             if (celebrities.length) return celebrities
             else 'Could not find any celebrities.'
         } catch (err) {
+            console.log(err)
             throw { err }
         }
     },
