@@ -1,5 +1,5 @@
 import { ApolloServer } from '@apollo/server'
-import { kindeNode } from '@kinde-oss/kinde-node'
+import kindeNode from '@kinde-oss/kinde-node'
 import { startStandaloneServer } from '@apollo/server/standalone'
 import { typeDefs } from './src/types.js'
 import { celebrityMutation, celebrityQuery } from './src/resolvers/celebrity.js'
