@@ -1,14 +1,14 @@
 import { ApolloServer } from '@apollo/server'
 import kindeNode from '@kinde-oss/kinde-node'
 import { startStandaloneServer } from '@apollo/server/standalone'
-import { typeDefs } from './types.js'
-import { celebrityMutation, celebrityQuery } from './resolvers/celebrity.js'
-import { fanQuery, fanMutation } from './resolvers/fan.js'
-import { businessMutation, businessQuery } from './resolvers/business.js'
-import { reviewMutation, reviewQuery } from './resolvers/review.js'
-import { workMutation } from './resolvers/work.js'
-import { resolverMap } from './resolvers/date.js'
-import { userMutation, userQuery } from './resolvers/user.js'
+import { typeDefs } from './src/types.js'
+import { celebrityMutation, celebrityQuery } from './src/resolvers/celebrity.js'
+import { fanQuery, fanMutation } from './src/resolvers/fan.js'
+import { businessMutation, businessQuery } from './src/resolvers/business.js'
+import { reviewMutation, reviewQuery } from './src/resolvers/review.js'
+import { workMutation } from './src/resolvers/work.js'
+import { resolverMap } from './src/resolvers/date.js'
+import { userMutation, userQuery } from './src/resolvers/user.js'
 
 (async function () {
     const authorize = await kindeNode(process.env.KINDE_DOMAIN)
