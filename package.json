@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "tsc --project tsconfig.json",
+    "build": "npm install && tsc",
     "start": "node ./dist/src/index.js",
     "dev": "npx tsc && node ./dist/index.js"
   },
