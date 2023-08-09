@@ -40,7 +40,7 @@ import { userMutation, userQuery } from './src/resolvers/user.js'
     })
 
     const { url } = await startStandaloneServer(server, {
-        listen: { port: 3001 },
+        listen: { port: Number.parseInt(process.env.PORT) || 3001 },
         /*context: async ({ req }) => {
             // auth check on every request
             const user = await new Promise((resolve, reject) => {
