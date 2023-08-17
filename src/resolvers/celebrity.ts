@@ -3,13 +3,22 @@ import { prisma } from "../../prisma/db.js";
 interface filterArgs {
     filter: {
         location?: string
-        price?: [number, number]
-        availability?: [Date, Date]
+        price?: {
+            range: boolean,
+            min: number,
+            max: number,
+        }
+        availability?: {
+            startDate: Date,
+            endDate: Date
+        }
         ageGroup?: [number, number]
         gender?: string[],
         languages?: string[],
         interests?: string[],
         opportunities?: string[],
+        name?: string,
+        category?: string
     }
 }
 
@@ -108,46 +117,55 @@ export const celebrityQuery = {
         try {
             const celebrities = await prisma.celebrity.findMany({
                 where: {
-                    languages: {
+                    languages: args.filter.languages.length ? {
                         hasSome: args.filter.languages
-                    },
+                    } : undefined,
 
-                    interests: {
+                    interests: args.filter.interests.length ? {
                         hasSome: args.filter.interests
-                    },
+                    } : undefined,
 
-                    gender: {
-                        in: args.filter.gender
-                    },
+                    gender: args.filter.gender.length ? {
+                        in: args.filter.gender 
+                    } : undefined,
 
-                    availableDays: {
+                    availableDays: args.filter.availability.startDate || args.filter.availability.endDate ? {
                         some: {
                             date: {
-                                gte: args.filter.availability[0],
-                                lte: args.filter.availability[1]
+                                gte: args.filter.availability.startDate || undefined,
+                                lte: args.filter.availability.endDate || undefined
                             }
                         }
-                    },
+                    } : undefined,
 
-                    workList: {
+                    workList: args.filter.opportunities.length || args.filter.price.range ? {
                         some: {
-                            type: {
-                                in: args.filter.opportunities
-                            },
+                            type: args.filter.opportunities.length ? {
+                                in: args.filter.opportunities 
+                            }: undefined,
 
-                            price: {
-                                gte: args.filter.price[0],
-                                lte: args.filter.price[1]
-                            }
+                            price: args.filter.price.range ? {
+                                gte: args.filter.price.min,
+                                lte: args.filter.price.max
+                            } : undefined
                         }
-                    },
+                    } : undefined,
 
                     age: {
-                        gte: args.filter.ageGroup[0],
-                        lte: args.filter.ageGroup[1]
+                        gte: args.filter.ageGroup.length ? args.filter.ageGroup[0] : undefined,
+                        lte: args.filter.ageGroup.length ? args.filter.ageGroup[1] : undefined
                     },
 
-                    location: args.filter.location
+                    location: args.filter.location || undefined,
+
+                    categories: args.filter.category.length ? {
+                        has: args.filter.category
+                    } : undefined,
+
+                    name: {
+                        contains: args.filter.name.length ? args.filter.name : '',
+                        mode: 'insensitive'
+                    }
                 },
 
                 orderBy: {
@@ -168,6 +186,7 @@ export const celebrityQuery = {
             if (celebrities.length) return celebrities
             else 'Could not find any celebrities.'
         } catch (err) {
+            console.log(err)
             throw { err }
         }
     },

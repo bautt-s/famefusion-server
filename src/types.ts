@@ -124,15 +124,29 @@ export const typeDefs = gql`
             date: Date
         }
 
+        input PriceInterface {
+            range: Boolean
+            min: Float
+            max: Float
+        }
+
+        input AvailabilityInterface {
+            startDate: Date
+            endDate: Date
+        }
+
         input DataFilter {
             location: String
-            price: [Int]
-            availability: [Date]
+            price: PriceInterface
+            availability: AvailabilityInterface
             ageGroup: [Int]
+            ageFilter: [String]
             gender: [String]
             languages: [String]
             interests: [String]
             opportunities: [String]
+            category: String
+            name: String
         }
 
         input UserInput {
