@@ -12,7 +12,7 @@ import { businessMutation, businessQuery } from './src/resolvers/business.js'
 import { reviewMutation, reviewQuery } from './src/resolvers/review.js'
 import { userMutation, userQuery } from './src/resolvers/user.js'
 import { fanQuery, fanMutation } from './src/resolvers/fan.js'
-import { workMutation } from './src/resolvers/work.js'
+import { workMutation, workQuery } from './src/resolvers/work.js'
 import { resolverMap } from './src/resolvers/date.js'
 import { typeDefs } from './src/types.js'
 
@@ -30,7 +30,8 @@ import { typeDefs } from './src/types.js'
             ...celebrityQuery,
             ...fanQuery,
             ...businessQuery,
-            ...reviewQuery
+            ...reviewQuery,
+            ...workQuery
         },
 
         Mutation: {

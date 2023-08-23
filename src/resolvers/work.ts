@@ -14,6 +14,28 @@ interface updateWork {
     }
 }
 
+export const workQuery = {
+    getWorkById: async (_parent: any, args: { id: string }) => {
+        try {
+            return await prisma.work.findUnique({
+                where: {
+                    id: args.id
+                },
+
+                include: {
+                    celebrity: {
+                        include: {
+                            workList: true
+                        }
+                    }
+                }
+            })
+        } catch (err) {
+            throw { err }
+        }
+    }
+}
+
 export const workMutation = {
     createWork: async (_parent: any, args: updateWork) => {
         try {

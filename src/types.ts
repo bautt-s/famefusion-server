@@ -250,6 +250,8 @@ export const typeDefs = gql`
             getBusinessById(id: String): Business
 
             getAllReviews: [Review]
+
+            getWorkById(id: String): Work
         }
 
         type Mutation {
