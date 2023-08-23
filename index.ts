@@ -58,7 +58,7 @@ import { typeDefs } from './src/types.js'
         bodyParser.json({ limit: '50mb' }),
 
         expressMiddleware(server, {
-           /* context: async ({ req }) => {
+           context: async ({ req }) => {
                 // auth check on every request
                 const user = await new Promise((resolve, reject) => {
                     authorize(req, (err: any, user: any) => {
@@ -72,7 +72,7 @@ import { typeDefs } from './src/types.js'
                 return {
                     user
                 };
-            }*/
+            }
         }),
     );
 
