@@ -20,7 +20,7 @@ export const userQuery = {
 
     getUserById: async (_parent: any, args: { id: string }, context: any) => {
         try {
-            if (!context.user) throw 'USER_NOT_AUTHENTICATED'
+            //if (!context.user) throw 'USER_NOT_AUTHENTICATED'
 
             return await prisma.user.findUnique({
                 where: {

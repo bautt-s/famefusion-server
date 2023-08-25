@@ -195,7 +195,7 @@ export const celebrityQuery = {
 export const celebrityMutation = {
     createCelebrity: async (_parent: any, args: createArgs, context: any) => {
         try {
-            if (!context.user) throw 'USER_NOT_AUTHENTICATED'
+            //if (!context.user) throw 'USER_NOT_AUTHENTICATED'
 
             const {
                 name,

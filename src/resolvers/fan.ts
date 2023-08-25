@@ -52,7 +52,7 @@ export const fanQuery = {
 export const fanMutation = {
     createFan: async (_parent: any, args: updateFan, context: any) => {
         try {
-            if (!context.user) throw 'USER_NOT_AUTHENTICATED'
+            //if (!context.user) throw 'USER_NOT_AUTHENTICATED'
 
             const { name, email, location, age, interests,
                 profilePic, userId, locationVerified, fanVerified } = args.fan

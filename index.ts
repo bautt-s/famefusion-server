@@ -20,7 +20,7 @@ import { typeDefs } from './src/types.js'
     const app = express()
     const httpServer = http.createServer(app)
 
-    const authorize = await kindeNode(process.env.KINDE_DOMAIN)
+    const authenticate = await kindeNode(process.env.KINDE_DOMAIN)
 
     const resolvers = {
         Date: resolverMap,
@@ -58,21 +58,17 @@ import { typeDefs } from './src/types.js'
         bodyParser.json({ limit: '50mb' }),
 
         expressMiddleware(server, {
-           context: async ({ req }) => {
-                // auth check on every request
-                const user = await new Promise((resolve, reject) => {
-                    authorize(req, (err: any, user: any) => {
-                        if (err) {
-                            return reject(err);
-                        }
-                        resolve(user);
-                    });
-                });
-
-                return {
-                    user
-                };
-            }
+            /*context: async (req) => {
+                try {
+                    const user = await authenticate(req);
+                    return {
+                        user
+                    };
+                } catch (error) {
+                    console.error(error);
+                    throw error
+                }
+            }*/
         }),
     );
 

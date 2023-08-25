@@ -51,7 +51,7 @@ export const businessQuery = {
 export const businessMutation = {
     createBusiness: async (_parent: any, args: updateBusiness, context: any) => {
         try {
-            if (!context.user) throw 'USER_NOT_AUTHENTICATED'
+            //if (!context.user) throw 'USER_NOT_AUTHENTICATED'
 
             const { name, email, location, businessEmail, description, categories,
                 businessVerified, userId, images, profilePic } = args.business
