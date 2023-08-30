@@ -6,7 +6,7 @@ interface updateFan {
         name?: string,
         email?: string,
         location?: string,
-        age?: number,
+        birthYear?: Date,
         interests?: string[],
         profilePic?: string,
         userId?: string,
@@ -54,7 +54,7 @@ export const fanMutation = {
         try {
             //if (!context.user) throw 'USER_NOT_AUTHENTICATED'
 
-            const { name, email, location, age, interests,
+            const { name, email, location, birthYear, interests,
                 profilePic, userId, locationVerified, fanVerified } = args.fan
 
             return await prisma.fan.create({
@@ -62,7 +62,7 @@ export const fanMutation = {
                     name,
                     email,
                     location,
-                    age,
+                    birthYear,
                     interests,
                     profilePic,
                     userId,
@@ -77,7 +77,7 @@ export const fanMutation = {
 
     updateFan: async (_parent: any, args: updateFan) => {
         try {
-            const { id, name, email, location, age, interests,
+            const { id, name, email, location, birthYear, interests,
                 profilePic, locationVerified, fanVerified } = args.fan
 
             return await prisma.fan.update({
@@ -87,7 +87,7 @@ export const fanMutation = {
                     name,
                     email,
                     location,
-                    age,
+                    birthYear,
                     interests,
                     profilePic,
                     locationVerified,

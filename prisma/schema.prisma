@@ -10,7 +10,7 @@ datasource db {
 model User {
   id                  String  @id @default(uuid()) @map("_id") 
   name                String
-  email               String
+  email               String  @unique
   role                Role    @default(User)
   associatedFan       Fan?
   associatedCelebrity Celebrity?
@@ -25,7 +25,7 @@ model Fan {
   email               String @unique
   location            String
   locationVerified    Boolean
-  age                 Int
+  birthYear           DateTime?
   interests           String[]
   fanVerified         Boolean
   profilePic          String?
@@ -47,7 +47,7 @@ model Celebrity {
   description         String
   associatedBrands    String[]
   categories          String[]
-  age                 Int
+  birthYear           DateTime?
   gender              String
   languages           String[]
   interests           String[]

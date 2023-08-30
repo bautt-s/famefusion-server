@@ -30,6 +30,18 @@ export const userQuery = {
         } catch (err) {
             throw { err }
         }
+    },
+
+    getUserByEmail: async (_parent: any, args: { email: string }) => {
+        try {
+            return await prisma.user.findUnique({
+                where: {
+                    email: args.email
+                }
+            })
+        } catch (err) {
+            throw { err }
+        }
     }
 }
 

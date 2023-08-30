@@ -33,7 +33,7 @@ interface createArgs {
         description?: string,
         associatedBrands?: string[],
         categories?: string[],
-        age?: number,
+        birthYear?: Date,
         gender?: string,
         languages?: string[],
         interests?: string[],
@@ -151,11 +151,6 @@ export const celebrityQuery = {
                         }
                     } : undefined,
 
-                    age: {
-                        gte: args.filter.ageGroup.length ? args.filter.ageGroup[0] : undefined,
-                        lte: args.filter.ageGroup.length ? args.filter.ageGroup[1] : undefined
-                    },
-
                     location: args.filter.location || undefined,
 
                     categories: args.filter.category.length ? {
@@ -206,7 +201,7 @@ export const celebrityMutation = {
                 description,
                 associatedBrands,
                 categories,
-                age,
+                birthYear,
                 gender,
                 languages,
                 interests,
@@ -227,7 +222,7 @@ export const celebrityMutation = {
                     description,
                     associatedBrands,
                     categories,
-                    age,
+                    birthYear,
                     gender,
                     languages,
                     interests,
@@ -255,7 +250,7 @@ export const celebrityMutation = {
                 description,
                 associatedBrands,
                 categories,
-                age,
+                birthYear,
                 gender,
                 languages,
                 interests,
@@ -280,7 +275,7 @@ export const celebrityMutation = {
                     description,
                     associatedBrands,
                     categories,
-                    age,
+                    birthYear,
                     gender,
                     languages,
                     interests,

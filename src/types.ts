@@ -238,6 +238,7 @@ export const typeDefs = gql`
         type Query {
             getAllUsers: [User]
             getUserById(id: String): User
+            getUserByEmail(email: String): User
 
             getAllCelebrities(name: String): [Celebrity]
             getCelebrityById(id: String): Celebrity
