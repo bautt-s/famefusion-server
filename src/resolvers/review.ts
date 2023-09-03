@@ -1,4 +1,5 @@
 import { prisma } from "../../prisma/db.js";
+import cloudinary from "../cloudinary.js";
 
 interface updateReview {
     review: {
@@ -33,12 +34,24 @@ export const reviewMutation = {
         try {
             const { title, date, description, images, stars, celebrityId, authorId } = args.review
 
+            const mediaCloudinary = <string[]>[];
+
+            images.map(async (image) => {
+                const result = await cloudinary.uploader.upload(image, {
+                    folder: 'reviewImgs',
+                    resource_type: 'auto',
+                })
+
+                mediaCloudinary.push(result.url)
+            })
+
+
             return await prisma.review.create({
                 data: {
                     title,
                     date,
                     description,
-                    images,
+                    images: mediaCloudinary,
                     stars,
                     celebrityId,
                     authorId

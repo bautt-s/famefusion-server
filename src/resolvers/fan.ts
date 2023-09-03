@@ -1,4 +1,5 @@
 import { prisma } from "../../prisma/db.js"
+import cloudinary from "../cloudinary.js"
 
 interface updateFan {
     fan: {
@@ -11,7 +12,11 @@ interface updateFan {
         profilePic?: string,
         userId?: string,
         locationVerified?: boolean,
-        fanVerified?: boolean,
+        identityVerified?: boolean,
+        selfieVerified?: boolean,
+        selfieImg?: string,
+        locationImg?: string,
+        identityImg?: string
     }
 }
 
@@ -54,8 +59,26 @@ export const fanMutation = {
         try {
             //if (!context.user) throw 'USER_NOT_AUTHENTICATED'
 
-            const { name, email, location, birthYear, interests,
-                profilePic, userId, locationVerified, fanVerified } = args.fan
+            const { name, email, location, birthYear, interests, selfieImg,
+            profilePic, userId, locationImg, identityImg } = args.fan
+
+            // upload profile pic img to cloudinary
+            const profilePicCloudinary = await cloudinary.uploader.upload(profilePic, {
+                folder: 'fanPP',
+            })
+
+            // upload verification files to cloudinary
+            const identityCloudinary = await cloudinary.uploader.upload(selfieImg, {
+                folder: 'fanIdentities',
+            })
+
+            const selfieCloudinary = await cloudinary.uploader.upload(identityImg, {
+                folder: 'fanSelfies',
+            })
+
+            const locationCloudinary = await cloudinary.uploader.upload(locationImg, {
+                folder: 'fanLocations',
+            })
 
             return await prisma.fan.create({
                 data: {
@@ -64,10 +87,11 @@ export const fanMutation = {
                     location,
                     birthYear,
                     interests,
-                    profilePic,
+                    profilePic: profilePicCloudinary.url,
                     userId,
-                    locationVerified,
-                    fanVerified,
+                    locationImg: locationCloudinary.url,
+                    selfieImg: selfieCloudinary.url,
+                    identityImg: identityCloudinary.url
                 }
             })
         } catch (err) {
@@ -77,21 +101,42 @@ export const fanMutation = {
 
     updateFan: async (_parent: any, args: updateFan) => {
         try {
-            const { id, name, email, location, birthYear, interests,
-                profilePic, locationVerified, fanVerified } = args.fan
+            const { id, name, email, location, birthYear, interests, selfieImg, locationImg,
+            profilePic, locationVerified, identityVerified, selfieVerified, identityImg } = args.fan
+
+            const profilePicCloudinary = profilePic ? await cloudinary.uploader.upload(profilePic, {
+                folder: 'fanPP',
+            }) : undefined
+
+            // upload verification files to cloudinary
+            const identityCloudinary = identityImg ? await cloudinary.uploader.upload(selfieImg, {
+                folder: 'fanIdentities',
+            }) : undefined
+
+            const selfieCloudinary = selfieImg ? await cloudinary.uploader.upload(identityImg, {
+                folder: 'fanSelfies',
+            }) : undefined
+
+            const locationCloudinary = locationImg ? await cloudinary.uploader.upload(locationImg, {
+                folder: 'fanLocations',
+            }) : undefined
 
             return await prisma.fan.update({
                 where: { id },
 
                 data: {
-                    name,
-                    email,
-                    location,
-                    birthYear,
-                    interests,
-                    profilePic,
-                    locationVerified,
-                    fanVerified,
+                    name: name || undefined,
+                    email: email || undefined,
+                    location: location || undefined,
+                    birthYear: birthYear || undefined,
+                    interests: interests || undefined,
+                    locationVerified: locationVerified || undefined,
+                    identityVerified: identityVerified || undefined,
+                    selfieVerified: selfieVerified || undefined,
+                    profilePic: profilePicCloudinary?.url,
+                    locationImg: locationCloudinary?.url,
+                    selfieImg: selfieCloudinary?.url,
+                    identityImg: identityCloudinary?.url
                 }
             })
         } catch (err) {

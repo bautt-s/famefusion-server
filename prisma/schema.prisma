@@ -8,10 +8,10 @@ datasource db {
 }
 
 model User {
-  id                  String  @id @default(uuid()) @map("_id") 
+  id                  String        @id @default(uuid()) @map("_id") 
   name                String
-  email               String  @unique
-  role                Role    @default(User)
+  email               String        @unique
+  role                Role          @default(User)
   associatedFan       Fan?
   associatedCelebrity Celebrity?
   associatedBusiness  Business?
@@ -20,28 +20,31 @@ model User {
 }
 
 model Fan {
-  id                  String @id @default(uuid()) @map("_id") 
+  id                  String        @id @default(uuid()) @map("_id") 
   name                String
-  email               String @unique
+  email               String        @unique
   location            String
-  locationVerified    Boolean
   birthYear           DateTime?
   interests           String[]
-  fanVerified         Boolean
+  selfieImg           String?
+  selfieVerified      Boolean       @default(false)
+  locationImg         String?
+  locationVerified    Boolean       @default(false)
+  identityImg         String?
+  identityVerified    Boolean       @default(false)
   profilePic          String?
   reviewList          Review[]
-  user                User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId              String @unique
+  user                User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId              String        @unique
   createdAt           DateTime      @default(now())
   updatedAt           DateTime      @updatedAt
 }
 
 model Celebrity {
-  id                  String @id @default(uuid()) @map("_id") 
+  id                  String        @id @default(uuid()) @map("_id") 
   name                String 
-  email               String @unique
+  email               String        @unique
   location            String
-  locationVerified    Boolean @default(false)
   nickname            String
   biography           String
   description         String
@@ -52,40 +55,46 @@ model Celebrity {
   languages           String[]
   interests           String[]
   // need to see what to do with social networks
-  celebrityVerified   Boolean @default(false)
+  selfieImg           String?
+  selfieVerified      Boolean       @default(false)
+  locationImg         String?
+  locationVerified    Boolean       @default(false)
+  identityImg         String?
+  identityVerified    Boolean       @default(false)
   media               String[]
-  video               String
   rating              Int?
   profilePic          String?
   availableDays       Day[]
   reviewList          Review[]
   workList            Work[]
-  associatedUser      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId              String @unique
+  associatedUser      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId              String        @unique
   createdAt           DateTime      @default(now())
   updatedAt           DateTime      @updatedAt
 }
 
 model Business {
-  id                  String @id @default(uuid()) @map("_id")
+  id                  String        @id @default(uuid()) @map("_id")
   name                String
-  email               String @unique
+  email               String        @unique
   businessEmail       String?
   location            String
   description         String
   categories          String[]
   // need to see what to do with social networks  
-  businessVerified    Boolean
-  associatedUser      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId              String @unique
-  images              String[]
+  selfieImg           String?
+  selfieVerified      Boolean       @default(false)
+  identityImg         String?
+  identityVerified    Boolean       @default(false)
+  associatedUser      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId              String        @unique
   profilePic          String?
   createdAt           DateTime      @default(now())
   updatedAt           DateTime      @updatedAt
 }
 
 model Work {
-  id                  String @id @default(uuid()) @map("_id") 
+  id                  String        @id @default(uuid()) @map("_id") 
   title               String
   type                String
   price               Float
@@ -93,31 +102,31 @@ model Work {
   duration            String
   online              Boolean
   collaboration       Boolean
-  celebrity           Celebrity @relation(fields: [celebrityId], references: [id], onDelete: Cascade)
+  celebrity           Celebrity      @relation(fields: [celebrityId], references: [id], onDelete: Cascade)
   celebrityId         String    
-  createdAt           DateTime  @default(now())
-  updatedAt           DateTime  @updatedAt
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
 }
 
 model Review {
-  id                  String @id @default(uuid()) @map("_id") 
+  id                  String        @id @default(uuid()) @map("_id") 
   title               String
-  date                DateTime @default(now())
+  date                DateTime      @default(now())
   description         String
   images              String[]
   stars               Float
-  celebrity           Celebrity @relation(fields: [celebrityId], references: [id], onDelete: Cascade)
+  celebrity           Celebrity     @relation(fields: [celebrityId], references: [id], onDelete: Cascade)
   celebrityId         String 
-  author              Fan       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  author              Fan           @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId            String 
   createdAt           DateTime      @default(now())
   updatedAt           DateTime      @updatedAt
 }
 
 model Day {
-  id            String      @id @map("_id") 
-  celebrity     Celebrity   @relation(fields: [celebrityId], references: [id], onDelete: Cascade)
-  celebrityId   String      @unique
+  id            String              @id @map("_id") 
+  celebrity     Celebrity           @relation(fields: [celebrityId], references: [id], onDelete: Cascade)
+  celebrityId   String              @unique
   date          DateTime
 }
 

@@ -1,4 +1,5 @@
 import { prisma } from "../../prisma/db.js";
+import cloudinary from "../cloudinary.js";
 
 interface filterArgs {
     filter: {
@@ -38,19 +39,22 @@ interface createArgs {
         languages?: string[],
         interests?: string[],
         media?: string[],
-        video?: string,
         rating?: number,
         profilePic?: string,
         userId?: string
         locationVerified?: boolean,
-        celebrityVerified?: boolean
+        identityVerified?: boolean,
+        selfieVerified?: boolean,
+        selfieImg?: string,
+        locationImg?: string,
+        identityImg?: string
     }
 }
 
 interface createDay {
-    day: { 
-        date?: Date, 
-        celebrityId?: string 
+    day: {
+        date?: Date,
+        celebrityId?: string
     }
 }
 
@@ -71,8 +75,8 @@ export const celebrityQuery = {
 
                 include: {
                     workList: {
-                        orderBy: { 
-                            price: 'asc' 
+                        orderBy: {
+                            price: 'asc'
                         }
                     },
                     associatedUser: true,
@@ -97,8 +101,8 @@ export const celebrityQuery = {
 
                 include: {
                     workList: {
-                        orderBy: { 
-                            price: 'asc' 
+                        orderBy: {
+                            price: 'asc'
                         }
                     },
                     associatedUser: true,
@@ -126,7 +130,7 @@ export const celebrityQuery = {
                     } : undefined,
 
                     gender: args.filter.gender.length ? {
-                        in: args.filter.gender 
+                        in: args.filter.gender
                     } : undefined,
 
                     availableDays: args.filter.availability.startDate || args.filter.availability.endDate ? {
@@ -141,8 +145,8 @@ export const celebrityQuery = {
                     workList: args.filter.opportunities.length || args.filter.price.range ? {
                         some: {
                             type: args.filter.opportunities.length ? {
-                                in: args.filter.opportunities 
-                            }: undefined,
+                                in: args.filter.opportunities
+                            } : undefined,
 
                             price: args.filter.price.range ? {
                                 gte: args.filter.price.min,
@@ -169,8 +173,8 @@ export const celebrityQuery = {
 
                 include: {
                     workList: {
-                        orderBy: { 
-                            price: 'asc' 
+                        orderBy: {
+                            price: 'asc'
                         }
                     },
                     associatedUser: true,
@@ -206,11 +210,43 @@ export const celebrityMutation = {
                 languages,
                 interests,
                 media,
-                video,
                 rating,
                 profilePic,
-                userId
+                userId,
+                selfieImg,
+                locationImg,
+                identityImg
             } = args.celebrity;
+
+            // upload media array images to cloudinary
+            const mediaCloudinary = <string[]>[];
+
+            media.map(async (image) => {
+                const result = await cloudinary.uploader.upload(image, {
+                    folder: 'celebritiesImgs',
+                    resource_type: 'auto',
+                })
+
+                mediaCloudinary.push(result.url)
+            })
+
+            // upload profile pic img to cloudinary
+            const profilePicCloudinary = await cloudinary.uploader.upload(profilePic, {
+                folder: 'celebritiesPP',
+            })
+
+            // upload verification files to cloudinary
+            const identityCloudinary = await cloudinary.uploader.upload(selfieImg, {
+                folder: 'celebrityIdentities',
+            })
+
+            const selfieCloudinary = await cloudinary.uploader.upload(identityImg, {
+                folder: 'celebritySelfies',
+            })
+
+            const locationCloudinary = await cloudinary.uploader.upload(locationImg, {
+                folder: 'celebrityLocations',
+            })
 
             return await prisma.celebrity.create({
                 data: {
@@ -226,11 +262,13 @@ export const celebrityMutation = {
                     gender,
                     languages,
                     interests,
-                    media,
-                    video,
+                    media: mediaCloudinary,
                     rating,
-                    profilePic,
-                    userId
+                    profilePic: profilePicCloudinary.url,
+                    userId,
+                    locationImg: locationCloudinary.url,
+                    selfieImg: selfieCloudinary.url,
+                    identityImg: identityCloudinary.url
                 }
             })
         } catch (err) {
@@ -255,37 +293,61 @@ export const celebrityMutation = {
                 languages,
                 interests,
                 media,
-                video,
                 rating,
                 profilePic,
                 userId,
                 locationVerified,
-                celebrityVerified
+                identityVerified,
+                selfieVerified,
+                selfieImg,
+                locationImg,
+                identityImg
             } = args.celebrity;
+
+            // upload profile pic img to cloudinary
+            const profilePicCloudinary = profilePic ? await cloudinary.uploader.upload(profilePic, {
+                folder: 'celebritiesPP',
+            }) : undefined
+
+            // upload verification files to cloudinary
+            const identityCloudinary = identityImg ? await cloudinary.uploader.upload(selfieImg, {
+                folder: 'celebrityIdentities',
+            }) : undefined
+
+            const selfieCloudinary = selfieImg ? await cloudinary.uploader.upload(identityImg, {
+                folder: 'celebritySelfies',
+            }) : undefined
+
+            const locationCloudinary = locationImg ? await cloudinary.uploader.upload(locationImg, {
+                folder: 'celebrityLocations',
+            }) : undefined
 
             return await prisma.celebrity.update({
                 where: { id },
 
                 data: {
-                    name,
-                    email,
-                    location,
-                    nickname,
-                    biography,
-                    description,
-                    associatedBrands,
-                    categories,
-                    birthYear,
-                    gender,
-                    languages,
-                    interests,
-                    media,
-                    video,
-                    rating,
-                    profilePic,
-                    userId,
-                    locationVerified,
-                    celebrityVerified
+                    name: name || undefined,
+                    email: email || undefined,
+                    location: location || undefined,
+                    nickname: nickname || undefined,
+                    biography: biography || undefined,
+                    description: description || undefined,
+                    associatedBrands: associatedBrands || undefined,
+                    categories: categories || undefined,
+                    birthYear: birthYear || undefined,
+                    gender: gender || undefined,
+                    languages: languages || undefined,
+                    interests: interests || undefined,
+                    media: media || undefined,
+                    rating: rating || undefined,
+                    profilePic: profilePicCloudinary?.url,
+                    userId: userId || undefined,
+                    locationVerified: locationVerified || undefined,
+                    identityVerified: identityVerified || undefined,
+                    selfieVerified: selfieVerified || undefined,
+                    locationImg: locationCloudinary?.url,
+                    selfieImg: selfieCloudinary?.url,
+                    identityImg: identityCloudinary?.url
                 }
             })
         } catch (err) {
@@ -299,7 +361,7 @@ export const celebrityMutation = {
 
             return await prisma.day.create({
                 data: {
-                    id: celebrityId+'-'+date.toDateString(),
+                    id: celebrityId + '-' + date.toDateString(),
                     date,
                     celebrityId
                 }
@@ -315,7 +377,7 @@ export const celebrityMutation = {
 
             return await prisma.day.delete({
                 where: {
-                    id: celebrityId+'-'+date.toDateString()
+                    id: celebrityId + '-' + date.toDateString()
                 }
             })
         } catch (err) {

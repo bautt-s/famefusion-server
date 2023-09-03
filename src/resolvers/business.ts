@@ -1,4 +1,5 @@
 import { prisma } from "../../prisma/db.js"
+import cloudinary from "../cloudinary.js"
 
 interface updateBusiness {
     business: {
@@ -9,10 +10,12 @@ interface updateBusiness {
         location?: string,
         description?: string,
         categories?: string[],
-        businessVerified?: boolean,
         userId?: string,
-        images?: string[],
-        profilePic?: string
+        profilePic?: string,
+        identityVerified?: boolean,
+        selfieVerified?: boolean,
+        selfieImg?: string,
+        identityImg?: string
     }
 }
 
@@ -41,7 +44,7 @@ export const businessQuery = {
                 }
             })
 
-            return business ?? 'Business could not be found.'
+            return business || 'Business could not be found.'
         } catch (err) {
             throw { err }
         }
@@ -54,7 +57,21 @@ export const businessMutation = {
             //if (!context.user) throw 'USER_NOT_AUTHENTICATED'
 
             const { name, email, location, businessEmail, description, categories,
-                businessVerified, userId, images, profilePic } = args.business
+            userId, profilePic, selfieImg, identityImg } = args.business
+
+            // upload profile pic img to cloudinary
+            const profilePicCloudinary = await cloudinary.uploader.upload(profilePic, {
+                folder: 'businessPP',
+            })
+
+            // upload verification files to cloudinary
+            const identityCloudinary = await cloudinary.uploader.upload(selfieImg, {
+                folder: 'businessIdentities',
+            })
+
+            const selfieCloudinary = await cloudinary.uploader.upload(identityImg, {
+                folder: 'businessSelfies',
+            })
 
             return await prisma.business.create({
                 data: {
@@ -64,10 +81,10 @@ export const businessMutation = {
                     businessEmail,
                     description,
                     categories,
-                    businessVerified,
                     userId,
-                    images,
-                    profilePic,
+                    profilePic: profilePicCloudinary.url,
+                    selfieImg: selfieCloudinary.url,
+                    identityImg: identityCloudinary.url
                 }
             })
         } catch (err) {
@@ -77,22 +94,38 @@ export const businessMutation = {
 
     updateBusiness: async (_parent: any, args: updateBusiness) => {
         try {
-            const { id, name, email, location, businessEmail, description,
-                categories, businessVerified, images, profilePic } = args.business
+            const { id, name, email, location, businessEmail, description, selfieVerified,
+                categories, identityVerified, profilePic, selfieImg, identityImg } = args.business
+
+            // upload profile pic img to cloudinary
+            const profilePicCloudinary = profilePic ? await cloudinary.uploader.upload(profilePic, {
+                folder: 'businessPP',
+            }) : undefined
+
+            // upload verification files to cloudinary
+            const identityCloudinary = selfieImg ? await cloudinary.uploader.upload(selfieImg, {
+                folder: 'businessIdentities',
+            }) : undefined
+
+            const selfieCloudinary = identityImg ? await cloudinary.uploader.upload(identityImg, {
+                folder: 'businessSelfies',
+            }) : undefined
 
             return await prisma.business.update({
                 where: { id },
 
                 data: {
-                    name,
-                    email,
-                    location,
-                    businessEmail,
-                    description,
-                    categories,
-                    businessVerified,
-                    images,
-                    profilePic,
+                    name: name || undefined,
+                    email: email || undefined,
+                    location: location || undefined,
+                    businessEmail: businessEmail || undefined,
+                    description: description || undefined,
+                    categories: categories || undefined,
+                    identityVerified: identityVerified || undefined,
+                    selfieVerified: selfieVerified || undefined,
+                    profilePic: profilePicCloudinary?.url,
+                    selfieImg: selfieCloudinary?.url,
+                    identityImg: identityCloudinary?.url
                 }
             })
         } catch (err) {

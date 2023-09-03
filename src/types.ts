@@ -48,7 +48,11 @@ export const typeDefs = gql`
             workList: [Work]
             associatedUser: User
             locationVerified: Boolean
-            celebrityVerified: Boolean
+            identityVerified: Boolean
+            selfieVerified: Boolean
+            selfieImg: String
+            identityImg: String
+            locationImg: String
             createdAt: Date
             updatedAt: Date
         }
@@ -65,7 +69,11 @@ export const typeDefs = gql`
             profilePic: String
             userId: String
             locationVerified: Boolean
-            fanVerified: Boolean
+            identityVerified: Boolean
+            selfieVerified: Boolean
+            selfieImg: String
+            identityImg: String
+            locationImg: String
             createdAt: Date
             updatedAt: Date
         }
@@ -78,10 +86,12 @@ export const typeDefs = gql`
             location: String
             description: String
             categories: [String]
-            businessVerified: Boolean
+            identityVerified: Boolean
+            identityImg: String
+            selfieVerified: Boolean
+            selfieImg: String
             associatedUser: User
             userId: String
-            images: [String]
             profilePic: String
             createdAt: Date
             updatedAt: Date
@@ -171,12 +181,14 @@ export const typeDefs = gql`
             languages: [String]
             interests: [String]
             media: [String]
-            video: String
             rating: Float
             profilePic: String
             userId: String
             locationVerified: Boolean
-            celebrityVerified: Boolean
+            identityVerified: Boolean
+            selfieImg: String
+            locationImg: String
+            identityImg: String
         }
 
         input FanInput {
@@ -184,12 +196,15 @@ export const typeDefs = gql`
             name: String
             email: String
             location: String
-            age: Int
             interests: [String]
             profilePic: String
             userId: String
             locationVerified: Boolean
-            fanVerified: Boolean
+            identityVerified: Boolean
+            selfieVerified: Boolean
+            selfieImg: String
+            locationImg: String
+            identityImg: String
         }
 
         input BusinessInput {
@@ -200,10 +215,12 @@ export const typeDefs = gql`
             location: String
             description: String
             categories: [String]
-            businessVerified: Boolean
             userId: String
-            images: [String]
             profilePic: String
+            identityVerified: Boolean
+            selfieVerified: Boolean
+            selfieImg: String
+            identityImg: String
         }
 
         input WorkInput {
