@@ -196,6 +196,7 @@ export const typeDefs = gql`
             name: String
             email: String
             location: String
+            birthYear: Date
             interests: [String]
             profilePic: String
             userId: String

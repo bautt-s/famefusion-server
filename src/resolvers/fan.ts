@@ -63,22 +63,22 @@ export const fanMutation = {
             profilePic, userId, locationImg, identityImg } = args.fan
 
             // upload profile pic img to cloudinary
-            const profilePicCloudinary = await cloudinary.uploader.upload(profilePic, {
+            const profilePicCloudinary = profilePic ? await cloudinary.uploader.upload(profilePic, {
                 folder: 'fanPP',
-            })
+            }) : undefined
 
             // upload verification files to cloudinary
-            const identityCloudinary = await cloudinary.uploader.upload(selfieImg, {
+            const identityCloudinary = selfieImg ? await cloudinary.uploader.upload(selfieImg, {
                 folder: 'fanIdentities',
-            })
+            }) : undefined
 
-            const selfieCloudinary = await cloudinary.uploader.upload(identityImg, {
+            const selfieCloudinary = identityImg ? await cloudinary.uploader.upload(identityImg, {
                 folder: 'fanSelfies',
-            })
+            }) : undefined
 
-            const locationCloudinary = await cloudinary.uploader.upload(locationImg, {
+            const locationCloudinary = locationImg ? await cloudinary.uploader.upload(locationImg, {
                 folder: 'fanLocations',
-            })
+            }) : undefined
 
             return await prisma.fan.create({
                 data: {
@@ -87,14 +87,15 @@ export const fanMutation = {
                     location,
                     birthYear,
                     interests,
-                    profilePic: profilePicCloudinary.url,
+                    profilePic: profilePicCloudinary?.url,
                     userId,
-                    locationImg: locationCloudinary.url,
-                    selfieImg: selfieCloudinary.url,
-                    identityImg: identityCloudinary.url
+                    locationImg: locationCloudinary?.url,
+                    selfieImg: selfieCloudinary?.url,
+                    identityImg: identityCloudinary?.url
                 }
             })
         } catch (err) {
+            console.log(err)
             throw { err }
         }
     },
