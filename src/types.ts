@@ -176,7 +176,7 @@ export const typeDefs = gql`
             description: String
             associatedBrands: [String]
             categories: [String]
-            age: Int
+            birthYear: Date
             gender: String
             languages: [String]
             interests: [String]
