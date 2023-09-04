@@ -60,18 +60,18 @@ export const businessMutation = {
             userId, profilePic, selfieImg, identityImg } = args.business
 
             // upload profile pic img to cloudinary
-            const profilePicCloudinary = await cloudinary.uploader.upload(profilePic, {
+            const profilePicCloudinary = profilePic ? await cloudinary.uploader.upload(profilePic, {
                 folder: 'businessPP',
-            })
+            }) : undefined
 
             // upload verification files to cloudinary
-            const identityCloudinary = await cloudinary.uploader.upload(selfieImg, {
+            const identityCloudinary = selfieImg ? await cloudinary.uploader.upload(selfieImg, {
                 folder: 'businessIdentities',
-            })
+            }) : undefined
 
-            const selfieCloudinary = await cloudinary.uploader.upload(identityImg, {
+            const selfieCloudinary = identityImg ? await cloudinary.uploader.upload(identityImg, {
                 folder: 'businessSelfies',
-            })
+            }) : undefined
 
             return await prisma.business.create({
                 data: {
@@ -82,12 +82,13 @@ export const businessMutation = {
                     description,
                     categories,
                     userId,
-                    profilePic: profilePicCloudinary.url,
-                    selfieImg: selfieCloudinary.url,
-                    identityImg: identityCloudinary.url
+                    profilePic: profilePicCloudinary?.url,
+                    selfieImg: selfieCloudinary?.url,
+                    identityImg: identityCloudinary?.url
                 }
             })
         } catch (err) {
+            console.log(err)
             throw { err }
         }
     },
@@ -129,6 +130,7 @@ export const businessMutation = {
                 }
             })
         } catch (err) {
+            console.log(err)
             throw { err }
         }
     },
