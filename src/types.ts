@@ -17,6 +17,7 @@ export const typeDefs = gql`
             name: String
             email: String
             role: Role 
+            profilePic: String
             associatedFan: Fan
             associatedCelebrity: Celebrity
             associatedBusiness: Business
@@ -41,7 +42,6 @@ export const typeDefs = gql`
             media: [String]
             video: String
             rating: Float
-            profilePic: String
             userId: String
             availableDays: [Day]
             reviewList: [Review]
@@ -66,7 +66,6 @@ export const typeDefs = gql`
             interests: [String]
             associatedUser: User
             reviewList: [Review]
-            profilePic: String
             userId: String
             locationVerified: Boolean
             identityVerified: Boolean
@@ -92,7 +91,6 @@ export const typeDefs = gql`
             selfieImg: String
             associatedUser: User
             userId: String
-            profilePic: String
             createdAt: Date
             updatedAt: Date
         }
@@ -164,6 +162,7 @@ export const typeDefs = gql`
             name: String!
             email: String!
             role: Role
+            profilePic: String
         }
 
         input CelebrityInput {
@@ -182,7 +181,6 @@ export const typeDefs = gql`
             interests: [String]
             media: [String]
             rating: Float
-            profilePic: String
             userId: String
             locationVerified: Boolean
             identityVerified: Boolean
@@ -198,7 +196,6 @@ export const typeDefs = gql`
             location: String
             birthYear: Date
             interests: [String]
-            profilePic: String
             userId: String
             locationVerified: Boolean
             identityVerified: Boolean
@@ -217,7 +214,6 @@ export const typeDefs = gql`
             description: String
             categories: [String]
             userId: String
-            profilePic: String
             identityVerified: Boolean
             selfieVerified: Boolean
             selfieImg: String

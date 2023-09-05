@@ -11,7 +11,6 @@ interface updateBusiness {
         description?: string,
         categories?: string[],
         userId?: string,
-        profilePic?: string,
         identityVerified?: boolean,
         selfieVerified?: boolean,
         selfieImg?: string,
@@ -57,12 +56,7 @@ export const businessMutation = {
             //if (!context.user) throw 'USER_NOT_AUTHENTICATED'
 
             const { name, email, location, businessEmail, description, categories,
-            userId, profilePic, selfieImg, identityImg } = args.business
-
-            // upload profile pic img to cloudinary
-            const profilePicCloudinary = profilePic ? await cloudinary.uploader.upload(profilePic, {
-                folder: 'businessPP',
-            }) : undefined
+            userId, selfieImg, identityImg } = args.business
 
             // upload verification files to cloudinary
             const identityCloudinary = selfieImg ? await cloudinary.uploader.upload(selfieImg, {
@@ -82,7 +76,6 @@ export const businessMutation = {
                     description,
                     categories,
                     userId,
-                    profilePic: profilePicCloudinary?.url,
                     selfieImg: selfieCloudinary?.url,
                     identityImg: identityCloudinary?.url
                 }
@@ -96,12 +89,7 @@ export const businessMutation = {
     updateBusiness: async (_parent: any, args: updateBusiness) => {
         try {
             const { id, name, email, location, businessEmail, description, selfieVerified,
-                categories, identityVerified, profilePic, selfieImg, identityImg } = args.business
-
-            // upload profile pic img to cloudinary
-            const profilePicCloudinary = profilePic ? await cloudinary.uploader.upload(profilePic, {
-                folder: 'businessPP',
-            }) : undefined
+            categories, identityVerified, selfieImg, identityImg } = args.business
 
             // upload verification files to cloudinary
             const identityCloudinary = selfieImg ? await cloudinary.uploader.upload(selfieImg, {
@@ -124,7 +112,6 @@ export const businessMutation = {
                     categories: categories || undefined,
                     identityVerified: identityVerified || undefined,
                     selfieVerified: selfieVerified || undefined,
-                    profilePic: profilePicCloudinary?.url,
                     selfieImg: selfieCloudinary?.url,
                     identityImg: identityCloudinary?.url
                 }

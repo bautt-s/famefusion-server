@@ -9,7 +9,6 @@ interface updateFan {
         location?: string,
         birthYear?: Date,
         interests?: string[],
-        profilePic?: string,
         userId?: string,
         locationVerified?: boolean,
         identityVerified?: boolean,
@@ -60,12 +59,7 @@ export const fanMutation = {
             //if (!context.user) throw 'USER_NOT_AUTHENTICATED'
 
             const { name, email, location, birthYear, interests, selfieImg,
-            profilePic, userId, locationImg, identityImg } = args.fan
-
-            // upload profile pic img to cloudinary
-            const profilePicCloudinary = profilePic ? await cloudinary.uploader.upload(profilePic, {
-                folder: 'fanPP',
-            }) : undefined
+            userId, locationImg, identityImg } = args.fan
 
             // upload verification files to cloudinary
             const identityCloudinary = selfieImg ? await cloudinary.uploader.upload(selfieImg, {
@@ -87,7 +81,6 @@ export const fanMutation = {
                     location,
                     birthYear,
                     interests,
-                    profilePic: profilePicCloudinary?.url,
                     userId,
                     locationImg: locationCloudinary?.url,
                     selfieImg: selfieCloudinary?.url,
@@ -103,11 +96,7 @@ export const fanMutation = {
     updateFan: async (_parent: any, args: updateFan) => {
         try {
             const { id, name, email, location, birthYear, interests, selfieImg, locationImg,
-            profilePic, locationVerified, identityVerified, selfieVerified, identityImg } = args.fan
-
-            const profilePicCloudinary = profilePic ? await cloudinary.uploader.upload(profilePic, {
-                folder: 'fanPP',
-            }) : undefined
+            locationVerified, identityVerified, selfieVerified, identityImg } = args.fan
 
             // upload verification files to cloudinary
             const identityCloudinary = identityImg ? await cloudinary.uploader.upload(selfieImg, {
@@ -134,7 +123,6 @@ export const fanMutation = {
                     locationVerified: locationVerified || undefined,
                     identityVerified: identityVerified || undefined,
                     selfieVerified: selfieVerified || undefined,
-                    profilePic: profilePicCloudinary?.url,
                     locationImg: locationCloudinary?.url,
                     selfieImg: selfieCloudinary?.url,
                     identityImg: identityCloudinary?.url

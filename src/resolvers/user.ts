@@ -1,4 +1,5 @@
 import { prisma } from '../../prisma/db.js'
+import cloudinary from '../cloudinary.js'
 
 interface updateUser {
     user: {
@@ -6,6 +7,7 @@ interface updateUser {
         name: string,
         email: string,
         role: 'User' | 'Admin',
+        profilePic: string | undefined
     }
 }
 
@@ -37,6 +39,12 @@ export const userQuery = {
             return await prisma.user.findUnique({
                 where: {
                     email: args.email
+                },
+
+                include: {
+                    associatedBusiness: true,
+                    associatedCelebrity: true,
+                    associatedFan: true
                 }
             })
         } catch (err) {
@@ -48,13 +56,18 @@ export const userQuery = {
 export const userMutation = {
     createUser: async (_parent: any, args: updateUser) => {
         try {
-            const { name, email, role } = args.user
-            console.log(name)
+            const { name, email, role, profilePic } = args.user
+            
+            const profilePicCloudinary = profilePic ? await cloudinary.uploader.upload(profilePic, {
+                folder: 'userPic',
+            }) : undefined
+
             return await prisma.user.create({
                 data: {
                     name,
                     email,
-                    role
+                    role,
+                    profilePic: profilePicCloudinary?.url
                 }
             })
         } catch (err) {
@@ -64,7 +77,11 @@ export const userMutation = {
 
     updateUser: async (_parent: any, args: updateUser) => {
         try {
-            const { id, name, email, role } = args.user
+            const { id, name, email, role, profilePic } = args.user
+
+            const profilePicCloudinary = profilePic ? await cloudinary.uploader.upload(profilePic, {
+                folder: 'userPic',
+            }) : undefined
 
             return await prisma.user.update({
                 where: { id },    
@@ -72,7 +89,8 @@ export const userMutation = {
                 data: {
                     name,
                     email,
-                    role
+                    role,
+                    profilePic: profilePicCloudinary?.url
                 }
             })
         } catch (err) {

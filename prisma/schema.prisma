@@ -12,6 +12,7 @@ model User {
   name                String
   email               String        @unique
   role                Role          @default(User)
+  profilePic          String?       @default("https://sites.nicholas.duke.edu/clarklab/files/2011/01/default_profile-d80441a6f25a9a0aac354978c65c8fa9.jpg")
   associatedFan       Fan?
   associatedCelebrity Celebrity?
   associatedBusiness  Business?
@@ -32,7 +33,6 @@ model Fan {
   locationVerified    Boolean       @default(false)
   identityImg         String?
   identityVerified    Boolean       @default(false)
-  profilePic          String?
   reviewList          Review[]
   user                User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId              String        @unique
@@ -63,7 +63,6 @@ model Celebrity {
   identityVerified    Boolean       @default(false)
   media               String[]
   rating              Int?
-  profilePic          String?
   availableDays       Day[]
   reviewList          Review[]
   workList            Work[]
@@ -88,7 +87,6 @@ model Business {
   identityVerified    Boolean       @default(false)
   associatedUser      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId              String        @unique
-  profilePic          String?
   createdAt           DateTime      @default(now())
   updatedAt           DateTime      @updatedAt
 }

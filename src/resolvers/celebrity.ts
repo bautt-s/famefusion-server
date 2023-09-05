@@ -40,7 +40,6 @@ interface createArgs {
         interests?: string[],
         media?: string[],
         rating?: number,
-        profilePic?: string,
         userId?: string
         locationVerified?: boolean,
         identityVerified?: boolean,
@@ -211,7 +210,6 @@ export const celebrityMutation = {
                 interests,
                 media,
                 rating,
-                profilePic,
                 userId,
                 selfieImg,
                 locationImg,
@@ -229,11 +227,6 @@ export const celebrityMutation = {
 
                 mediaCloudinary.push(result.url)
             })
-
-            // upload profile pic img to cloudinary
-            const profilePicCloudinary = profilePic ? await cloudinary.uploader.upload(profilePic, {
-                folder: 'celebritiesPP',
-            }) : undefined
 
             // upload verification files to cloudinary
             const identityCloudinary = selfieImg ? await cloudinary.uploader.upload(selfieImg, {
@@ -264,7 +257,6 @@ export const celebrityMutation = {
                     interests,
                     media: mediaCloudinary,
                     rating,
-                    profilePic: profilePicCloudinary?.url,
                     userId,
                     locationImg: locationCloudinary?.url,
                     selfieImg: selfieCloudinary?.url,
@@ -295,7 +287,6 @@ export const celebrityMutation = {
                 interests,
                 media,
                 rating,
-                profilePic,
                 userId,
                 locationVerified,
                 identityVerified,
@@ -304,11 +295,6 @@ export const celebrityMutation = {
                 locationImg,
                 identityImg
             } = args.celebrity;
-
-            // upload profile pic img to cloudinary
-            const profilePicCloudinary = profilePic ? await cloudinary.uploader.upload(profilePic, {
-                folder: 'celebritiesPP',
-            }) : undefined
 
             // upload verification files to cloudinary
             const identityCloudinary = identityImg ? await cloudinary.uploader.upload(selfieImg, {
@@ -341,7 +327,6 @@ export const celebrityMutation = {
                     interests: interests || undefined,
                     media: media || undefined,
                     rating: rating || undefined,
-                    profilePic: profilePicCloudinary?.url,
                     userId: userId || undefined,
                     locationVerified: locationVerified || undefined,
                     identityVerified: identityVerified || undefined,
