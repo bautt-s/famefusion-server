@@ -94,6 +94,7 @@ export const userMutation = {
                 }
             })
         } catch (err) {
+            console.log(err)
             throw { err }
         }
     },

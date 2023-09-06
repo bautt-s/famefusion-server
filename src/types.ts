@@ -35,8 +35,8 @@ export const typeDefs = gql`
             description: String
             associatedBrands: [String]
             categories: [String]
-            age: Int
             gender: String
+            birthYear: Date
             languages: [String]
             interests: [String]
             media: [String]
@@ -62,11 +62,11 @@ export const typeDefs = gql`
             name: String
             email: String
             location: String
-            age: Int
             interests: [String]
-            associatedUser: User
+            user: User
             reviewList: [Review]
             userId: String
+            birthYear: Date
             locationVerified: Boolean
             identityVerified: Boolean
             selfieVerified: Boolean
