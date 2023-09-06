@@ -60,6 +60,7 @@ export const userMutation = {
             
             const profilePicCloudinary = profilePic ? await cloudinary.uploader.upload(profilePic, {
                 folder: 'userPic',
+                public_id: email
             }) : undefined
 
             return await prisma.user.create({
@@ -79,9 +80,14 @@ export const userMutation = {
         try {
             const { id, name, email, role, profilePic } = args.user
 
-            const profilePicCloudinary = profilePic ? await cloudinary.uploader.upload(profilePic, {
-                folder: 'userPic',
-            }) : undefined
+            const profilePicCloudinary = profilePic ? await
+            cloudinary.uploader.upload(profilePic, { public_id: email, folder: 'userPic' }, (error, result) => {
+                if (error) {
+                  console.error('Error uploading new image:', error);
+                } else {
+                  console.log('New image uploaded successfully.');
+                }
+              }) : undefined
 
             return await prisma.user.update({
                 where: { id },    
