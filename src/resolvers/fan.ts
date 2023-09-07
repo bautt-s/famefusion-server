@@ -63,14 +63,17 @@ export const fanMutation = {
 
             // upload verification files to cloudinary
             const identityCloudinary = selfieImg ? await cloudinary.uploader.upload(selfieImg, {
+                public_id: email,
                 folder: 'fanIdentities',
             }) : undefined
 
             const selfieCloudinary = identityImg ? await cloudinary.uploader.upload(identityImg, {
+                public_id: email,
                 folder: 'fanSelfies',
             }) : undefined
 
             const locationCloudinary = locationImg ? await cloudinary.uploader.upload(locationImg, {
+                public_id: email,
                 folder: 'fanLocations',
             }) : undefined
 
@@ -100,14 +103,17 @@ export const fanMutation = {
 
             // upload verification files to cloudinary
             const identityCloudinary = identityImg ? await cloudinary.uploader.upload(selfieImg, {
+                public_id: email,
                 folder: 'fanIdentities',
             }) : undefined
 
             const selfieCloudinary = selfieImg ? await cloudinary.uploader.upload(identityImg, {
+                public_id: email,
                 folder: 'fanSelfies',
             }) : undefined
 
             const locationCloudinary = locationImg ? await cloudinary.uploader.upload(locationImg, {
+                public_id: email,
                 folder: 'fanLocations',
             }) : undefined
 
