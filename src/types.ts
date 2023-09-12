@@ -53,6 +53,12 @@ export const typeDefs = gql`
             selfieImg: String
             identityImg: String
             locationImg: String
+            websiteLink: String,
+            instagramLink: String,
+            tiktokLink: String,
+            facebookLink: String,
+            twitterLink: String,
+            youtubeLink: String,
             createdAt: Date
             updatedAt: Date
         }
@@ -73,6 +79,12 @@ export const typeDefs = gql`
             selfieImg: String
             identityImg: String
             locationImg: String
+            websiteLink: String,
+            instagramLink: String,
+            tiktokLink: String,
+            facebookLink: String,
+            twitterLink: String,
+            youtubeLink: String,
             createdAt: Date
             updatedAt: Date
         }
@@ -187,6 +199,12 @@ export const typeDefs = gql`
             selfieImg: String
             locationImg: String
             identityImg: String
+            websiteLink: String,
+            instagramLink: String,
+            tiktokLink: String,
+            facebookLink: String,
+            twitterLink: String,
+            youtubeLink: String,
         }
 
         input FanInput {
@@ -203,6 +221,12 @@ export const typeDefs = gql`
             selfieImg: String
             locationImg: String
             identityImg: String
+            websiteLink: String,
+            instagramLink: String,
+            tiktokLink: String,
+            facebookLink: String,
+            twitterLink: String,
+            youtubeLink: String,
         }
 
         input BusinessInput {

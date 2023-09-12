@@ -46,7 +46,13 @@ interface createArgs {
         selfieVerified?: boolean,
         selfieImg?: string,
         locationImg?: string,
-        identityImg?: string
+        identityImg?: string,
+        websiteLink?: string,
+        instagramLink?: string,
+        tiktokLink?: string,
+        facebookLink?: string,
+        twitterLink?: string,
+        youtubeLink?: string,
     }
 }
 
@@ -213,7 +219,13 @@ export const celebrityMutation = {
                 userId,
                 selfieImg,
                 locationImg,
-                identityImg
+                identityImg, 
+                websiteLink, 
+                tiktokLink,
+                facebookLink, 
+                twitterLink, 
+                instagramLink, 
+                youtubeLink
             } = args.celebrity;
 
             // upload media array images to cloudinary
@@ -260,7 +272,13 @@ export const celebrityMutation = {
                     userId,
                     locationImg: locationCloudinary?.url,
                     selfieImg: selfieCloudinary?.url,
-                    identityImg: identityCloudinary?.url
+                    identityImg: identityCloudinary?.url,
+                    websiteLink,
+                    tiktokLink,
+                    youtubeLink,
+                    instagramLink,
+                    facebookLink,
+                    twitterLink
                 }
             })
         } catch (err) {
@@ -293,7 +311,13 @@ export const celebrityMutation = {
                 selfieVerified,
                 selfieImg,
                 locationImg,
-                identityImg
+                identityImg,
+                websiteLink,
+                tiktokLink,
+                youtubeLink,
+                instagramLink,
+                facebookLink,
+                twitterLink
             } = args.celebrity;
 
             // upload verification files to cloudinary
@@ -333,7 +357,13 @@ export const celebrityMutation = {
                     selfieVerified: selfieVerified || undefined,
                     locationImg: locationCloudinary?.url,
                     selfieImg: selfieCloudinary?.url,
-                    identityImg: identityCloudinary?.url
+                    identityImg: identityCloudinary?.url,
+                    websiteLink: websiteLink || undefined,
+                    tiktokLink: tiktokLink || undefined,
+                    youtubeLink: youtubeLink || undefined,
+                    instagramLink: instagramLink || undefined,
+                    facebookLink: facebookLink || undefined,
+                    twitterLink: twitterLink || undefined,
                 }
             })
         } catch (err) {

@@ -27,6 +27,12 @@ model Fan {
   location            String
   birthYear           DateTime?
   interests           String[]
+  websiteLink         String?
+  instagramLink       String?
+  tiktokLink          String?
+  facebookLink        String?
+  twitterLink         String?
+  youtubeLink         String?
   selfieImg           String?
   selfieVerified      Boolean       @default(false)
   locationImg         String?
@@ -54,7 +60,12 @@ model Celebrity {
   gender              String
   languages           String[]
   interests           String[]
-  // need to see what to do with social networks
+  websiteLink         String?
+  instagramLink       String?
+  tiktokLink          String?
+  facebookLink        String?
+  twitterLink         String?
+  youtubeLink         String?
   selfieImg           String?
   selfieVerified      Boolean       @default(false)
   locationImg         String?

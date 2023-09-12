@@ -15,7 +15,13 @@ interface updateFan {
         selfieVerified?: boolean,
         selfieImg?: string,
         locationImg?: string,
-        identityImg?: string
+        identityImg?: string,
+        websiteLink?: string,
+        instagramLink?: string,
+        tiktokLink?: string,
+        facebookLink?: string,
+        twitterLink?: string,
+        youtubeLink?: string,
     }
 }
 
@@ -59,7 +65,8 @@ export const fanMutation = {
             //if (!context.user) throw 'USER_NOT_AUTHENTICATED'
 
             const { name, email, location, birthYear, interests, selfieImg,
-            userId, locationImg, identityImg } = args.fan
+            userId, locationImg, identityImg, websiteLink, tiktokLink,
+            facebookLink, twitterLink, instagramLink, youtubeLink } = args.fan
 
             // upload verification files to cloudinary
             const identityCloudinary = selfieImg ? await cloudinary.uploader.upload(selfieImg, {
@@ -87,7 +94,13 @@ export const fanMutation = {
                     userId,
                     locationImg: locationCloudinary?.url,
                     selfieImg: selfieCloudinary?.url,
-                    identityImg: identityCloudinary?.url
+                    identityImg: identityCloudinary?.url,
+                    websiteLink,
+                    tiktokLink,
+                    youtubeLink,
+                    instagramLink,
+                    facebookLink,
+                    twitterLink
                 }
             })
         } catch (err) {
@@ -99,7 +112,8 @@ export const fanMutation = {
     updateFan: async (_parent: any, args: updateFan) => {
         try {
             const { id, name, email, location, birthYear, interests, selfieImg, locationImg,
-            locationVerified, identityVerified, selfieVerified, identityImg } = args.fan
+            locationVerified, identityVerified, selfieVerified, identityImg, websiteLink, tiktokLink,
+            facebookLink, twitterLink, instagramLink, youtubeLink } = args.fan
 
             // upload verification files to cloudinary
             const identityCloudinary = identityImg ? await cloudinary.uploader.upload(selfieImg, {
@@ -131,7 +145,13 @@ export const fanMutation = {
                     selfieVerified: selfieVerified || undefined,
                     locationImg: locationCloudinary?.url,
                     selfieImg: selfieCloudinary?.url,
-                    identityImg: identityCloudinary?.url
+                    identityImg: identityCloudinary?.url,
+                    websiteLink: websiteLink !== undefined ? websiteLink : undefined,
+                    tiktokLink: tiktokLink !== undefined ? tiktokLink : undefined,
+                    youtubeLink: youtubeLink !== undefined ? youtubeLink : undefined,
+                    instagramLink: instagramLink !== undefined ? instagramLink : undefined,
+                    facebookLink: facebookLink !== undefined ? facebookLink : undefined,
+                    twitterLink: twitterLink !== undefined ? twitterLink : undefined,
                 }
             })
         } catch (err) {
