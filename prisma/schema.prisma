@@ -42,12 +42,14 @@ model Fan {
   reviewList          Review[]
   user                User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId              String        @unique
+  savedCelIDs         String[]      
+  savedCelebrities    Celebrity[]   @relation(fields: [savedCelIDs], references: [id])
   createdAt           DateTime      @default(now())
   updatedAt           DateTime      @updatedAt
 }
 
 model Celebrity {
-  id                  String        @id @default(uuid()) @map("_id") 
+  id                  String        @id @default(uuid()) @map("_id")
   name                String 
   email               String        @unique
   location            String
@@ -78,6 +80,8 @@ model Celebrity {
   reviewList          Review[]
   workList            Work[]
   associatedUser      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  savedIDs            String[]      
+  savedBy             Fan[]         @relation(fields: [savedIDs], references: [id])
   userId              String        @unique
   createdAt           DateTime      @default(now())
   updatedAt           DateTime      @updatedAt
@@ -112,7 +116,7 @@ model Work {
   online              Boolean
   collaboration       Boolean
   celebrity           Celebrity      @relation(fields: [celebrityId], references: [id], onDelete: Cascade)
-  celebrityId         String    
+  celebrityId         String         
   createdAt           DateTime       @default(now())
   updatedAt           DateTime       @updatedAt
 }
@@ -125,9 +129,9 @@ model Review {
   images              String[]
   stars               Float
   celebrity           Celebrity     @relation(fields: [celebrityId], references: [id], onDelete: Cascade)
-  celebrityId         String 
+  celebrityId         String        
   author              Fan           @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  authorId            String 
+  authorId            String        
   createdAt           DateTime      @default(now())
   updatedAt           DateTime      @updatedAt
 }
@@ -135,7 +139,7 @@ model Review {
 model Day {
   id            String              @id @map("_id") 
   celebrity     Celebrity           @relation(fields: [celebrityId], references: [id], onDelete: Cascade)
-  celebrityId   String              @unique
+  celebrityId   String              
   date          DateTime
 }
 

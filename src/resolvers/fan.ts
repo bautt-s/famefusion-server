@@ -31,7 +31,13 @@ export const fanQuery = {
             return await prisma.fan.findMany({
                 include: {
                     reviewList: true,
-                    user: true
+                    user: true,
+                    savedCelebrities: {
+                        include: {
+                            workList: true,
+                            associatedUser: true
+                        }
+                    }
                 }
             })
         } catch (err) {
@@ -48,7 +54,13 @@ export const fanQuery = {
 
                 include: {
                     reviewList: true,
-                    user: true
+                    user: true,
+                    savedCelebrities: {
+                        include: {
+                            workList: true,
+                            associatedUser: true
+                        }
+                    }
                 }
             })
 
@@ -155,6 +167,63 @@ export const fanMutation = {
                 }
             })
         } catch (err) {
+            throw { err }
+        }
+    },
+
+    addToWishlist: async (_parent: any, args: { ids: { id: string, celId: string }}) => {
+        try {
+            const { id, celId } = args.ids
+
+            await prisma.celebrity.update({
+                where: { id: celId },
+                data: {
+                    savedBy: {
+                        connect: { id }
+                    }
+                }
+            })
+
+            return await prisma.fan.update({
+                where: { id },
+
+                data: {
+                    savedCelebrities: {
+                        connect: { id: celId }
+                    }
+                }
+            })
+        } catch (err) {
+            console.log(err)
+            throw { err }
+        }
+    },
+
+    removeFromWishlist: async (_parent: any, args: { ids: { id: string, celId: string }}) => {
+        try {
+            const { id, celId } = args.ids
+
+            await prisma.celebrity.update({
+                where: { id: celId },
+
+                data: {
+                    savedBy: {
+                        disconnect: { id }
+                    }
+                }
+            })
+
+            return await prisma.fan.update({
+                where: { id },
+
+                data: {
+                    savedCelebrities: {
+                        disconnect: { id: celId }
+                    }
+                }
+            })
+        } catch (err) {
+            console.log(err)
             throw { err }
         }
     },

@@ -44,7 +44,16 @@ export const userQuery = {
                 include: {
                     associatedBusiness: true,
                     associatedCelebrity: true,
-                    associatedFan: true
+                    associatedFan: {
+                        include: {
+                            savedCelebrities: {
+                                include: {
+                                    workList: true,
+                                    associatedUser: true
+                                }
+                            }
+                        }
+                    }
                 }
             })
         } catch (err) {

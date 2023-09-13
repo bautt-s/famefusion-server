@@ -59,6 +59,8 @@ export const typeDefs = gql`
             facebookLink: String,
             twitterLink: String,
             youtubeLink: String,
+            savedIDs: [String],
+            savedBy: [Fan]
             createdAt: Date
             updatedAt: Date
         }
@@ -85,6 +87,8 @@ export const typeDefs = gql`
             facebookLink: String,
             twitterLink: String,
             youtubeLink: String,
+            savedCelIDs: [String],
+            savedCelebrities: [Celebrity]
             createdAt: Date
             updatedAt: Date
         }
@@ -273,6 +277,11 @@ export const typeDefs = gql`
             celebrityId: String
         }
 
+        input WishlistInput {
+            id: String,
+            celId: String
+        }
+
         type Query {
             getAllUsers: [User]
             getUserById(id: String): User
@@ -306,6 +315,8 @@ export const typeDefs = gql`
 
             createFan(fan: FanInput): Fan
             updateFan(fan: FanInput): Fan
+            addToWishlist(ids: WishlistInput): Fan
+            removeFromWishlist(ids: WishlistInput): Fan
             deleteFan(id: String): Fan
 
             createBusiness(business: BusinessInput): Business
