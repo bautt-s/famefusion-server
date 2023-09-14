@@ -51,7 +51,8 @@ export const userQuery = {
                                     workList: true,
                                     associatedUser: true
                                 }
-                            }
+                            },
+                            savedExperiences: true
                         }
                     }
                 }

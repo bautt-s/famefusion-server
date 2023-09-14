@@ -37,7 +37,8 @@ export const fanQuery = {
                             workList: true,
                             associatedUser: true
                         }
-                    }
+                    },
+                    savedExperiences: true
                 }
             })
         } catch (err) {
@@ -60,7 +61,8 @@ export const fanQuery = {
                             workList: true,
                             associatedUser: true
                         }
-                    }
+                    },
+                    savedExperiences: true
                 }
             })
 
@@ -219,6 +221,63 @@ export const fanMutation = {
                 data: {
                     savedCelebrities: {
                         disconnect: { id: celId }
+                    }
+                }
+            })
+        } catch (err) {
+            console.log(err)
+            throw { err }
+        }
+    },
+
+    addToExperiences: async (_parent: any, args: { ids: { id: string, workId: string }}) => {
+        try {
+            const { id, workId } = args.ids
+
+            await prisma.work.update({
+                where: { id: workId },
+                data: {
+                    savedBy: {
+                        connect: { id }
+                    }
+                }
+            })
+
+            return await prisma.fan.update({
+                where: { id },
+
+                data: {
+                    savedExperiences: {
+                        connect: { id: workId }
+                    }
+                }
+            })
+        } catch (err) {
+            console.log(err)
+            throw { err }
+        }
+    },
+
+    removeFromExperiences: async (_parent: any, args: { ids: { id: string, workId: string }}) => {
+        try {
+            const { id, workId } = args.ids
+
+            await prisma.work.update({
+                where: { id: workId },
+
+                data: {
+                    savedBy: {
+                        disconnect: { id }
+                    }
+                }
+            })
+
+            return await prisma.fan.update({
+                where: { id },
+
+                data: {
+                    savedExperiences: {
+                        disconnect: { id: workId }
                     }
                 }
             })

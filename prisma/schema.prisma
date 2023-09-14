@@ -44,6 +44,8 @@ model Fan {
   userId              String        @unique
   savedCelIDs         String[]      
   savedCelebrities    Celebrity[]   @relation(fields: [savedCelIDs], references: [id])
+  savedExpIDs         String[]
+  savedExperiences    Work[]        @relation(fields: [savedExpIDs], references: [id])
   createdAt           DateTime      @default(now())
   updatedAt           DateTime      @updatedAt
 }
@@ -117,6 +119,8 @@ model Work {
   collaboration       Boolean
   celebrity           Celebrity      @relation(fields: [celebrityId], references: [id], onDelete: Cascade)
   celebrityId         String         
+  savedIDs            String[]
+  savedBy             Fan[]          @relation(fields: [savedIDs], references: [id])
   createdAt           DateTime       @default(now())
   updatedAt           DateTime       @updatedAt
 }

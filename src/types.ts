@@ -81,14 +81,16 @@ export const typeDefs = gql`
             selfieImg: String
             identityImg: String
             locationImg: String
-            websiteLink: String,
-            instagramLink: String,
-            tiktokLink: String,
-            facebookLink: String,
-            twitterLink: String,
-            youtubeLink: String,
-            savedCelIDs: [String],
+            websiteLink: String
+            instagramLink: String
+            tiktokLink: String
+            facebookLink: String
+            twitterLink: String
+            youtubeLink: String
+            savedCelIDs: [String]
             savedCelebrities: [Celebrity]
+            savedExpIDs: [String]
+            savedExperiences: [Work]
             createdAt: Date
             updatedAt: Date
         }
@@ -122,6 +124,8 @@ export const typeDefs = gql`
             collaboration: Boolean
             celebrity: Celebrity 
             celebrityId: String 
+            savedIDs: [String]
+            savedBy: [Fan]
             createdAt: Date  
             updatedAt: Date 
         }
@@ -282,6 +286,11 @@ export const typeDefs = gql`
             celId: String
         }
 
+        input ExperiencesInput {
+            id: String,
+            workId: String
+        }
+
         type Query {
             getAllUsers: [User]
             getUserById(id: String): User
@@ -317,6 +326,8 @@ export const typeDefs = gql`
             updateFan(fan: FanInput): Fan
             addToWishlist(ids: WishlistInput): Fan
             removeFromWishlist(ids: WishlistInput): Fan
+            addToExperiences(ids: ExperiencesInput): Fan
+            removeFromExperiences(ids: ExperiencesInput): Fan
             deleteFan(id: String): Fan
 
             createBusiness(business: BusinessInput): Business
