@@ -115,6 +115,9 @@ model Work {
   price               Float
   description         String
   duration            String
+  productId           String?
+  priceId             String?
+  enabled             Boolean        @default(true)
   online              Boolean
   collaboration       Boolean
   celebrity           Celebrity      @relation(fields: [celebrityId], references: [id], onDelete: Cascade)

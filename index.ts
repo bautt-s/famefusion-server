@@ -10,9 +10,10 @@ import cors from 'cors'
 import { celebrityMutation, celebrityQuery } from './src/resolvers/celebrity.js'
 import { businessMutation, businessQuery } from './src/resolvers/business.js'
 import { reviewMutation, reviewQuery } from './src/resolvers/review.js'
+import { stripeQuery, stripeMutation } from './src/resolvers/stripe.js'
 import { userMutation, userQuery } from './src/resolvers/user.js'
-import { fanQuery, fanMutation } from './src/resolvers/fan.js'
 import { workMutation, workQuery } from './src/resolvers/work.js'
+import { fanQuery, fanMutation } from './src/resolvers/fan.js'
 import { resolverMap } from './src/resolvers/date.js'
 import { typeDefs } from './src/types.js'
 
@@ -31,7 +32,8 @@ import { typeDefs } from './src/types.js'
             ...fanQuery,
             ...businessQuery,
             ...reviewQuery,
-            ...workQuery
+            ...workQuery,
+            ...stripeQuery
         },
 
         Mutation: {
@@ -40,7 +42,8 @@ import { typeDefs } from './src/types.js'
             ...fanMutation,
             ...businessMutation,
             ...reviewMutation,
-            ...workMutation
+            ...workMutation,
+            ...stripeMutation
         }
     }
 

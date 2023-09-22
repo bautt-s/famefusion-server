@@ -124,6 +124,8 @@ export const typeDefs = gql`
             collaboration: Boolean
             celebrity: Celebrity 
             celebrityId: String 
+            productId: String
+            priceId: String
             savedIDs: [String]
             savedBy: [Fan]
             createdAt: Date  
@@ -143,6 +145,18 @@ export const typeDefs = gql`
             authorId: String
             createdAt: Date    
             updatedAt: Date    
+        }
+
+        type Product {
+            id: String,
+            object: String,
+            active: Boolean,
+            created: Int,
+            default_price: String,
+            description: String,
+            features: [String],
+            images: [String],
+            name: String
         }
 
         type Day {
@@ -262,33 +276,52 @@ export const typeDefs = gql`
             online: Boolean
             collaboration: Boolean
             celebrityId: String
+            productId: String
         }
 
         input ReviewInput {
-            id: String,
-            title: String,
-            type: String,
-            date: Date,
-            description: String,
-            images: [String],
-            stars: Float,
-            celebrityId: String,
-            authorId: String,  
+            id: String
+            title: String
+            type: String
+            date: Date
+            description: String
+            images: [String]
+            stars: Float
+            celebrityId: String
+            authorId: String, 
         }
 
         input DayInput {
-            date: Date,
+            date: Date
             celebrityId: String
         }
 
         input WishlistInput {
-            id: String,
+            id: String
             celId: String
         }
 
         input ExperiencesInput {
-            id: String,
+            id: String
             workId: String
+        }
+
+        input ProductInput { 
+            productId: String
+            name: String
+            description: String
+            images: [String]
+            unit_amount: Int
+        }
+
+        input PriceInput {
+            priceId: String
+            unit_amount: Int
+        }
+
+        input EnableInput {
+            productId: String
+            active: Boolean
         }
 
         type Query {
@@ -309,6 +342,9 @@ export const typeDefs = gql`
             getAllReviews: [Review]
 
             getWorkById(id: String): Work
+
+            createCheckoutSession(price: String): String
+            getProductById(productId: String): Product
         }
 
         type Mutation {
@@ -341,5 +377,10 @@ export const typeDefs = gql`
             createWork(work: WorkInput): Work
             updateWork(work: WorkInput): Work
             deleteWork(id: String): Work
+
+            createStripeProduct(product: ProductInput): Product
+            updateStripeProduct(product: ProductInput): Product
+            updateStripePrice(price: PriceInput): String
+            activateStripeProduct(enable: EnableInput): String
         }
 `
