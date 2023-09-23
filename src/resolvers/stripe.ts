@@ -10,7 +10,8 @@ interface createProduct {
     }
 }
 
-const stripe = new Stripe(process.env.STRIPE_STORE, { apiVersion: "2023-08-16" })
+const STRIPE_STORE = process.env.STRIPE_STORE
+const stripe = new Stripe(STRIPE_STORE, { apiVersion: "2023-08-16" })
 
 export const stripeQuery = {
     createCheckoutSession: async (_parent: any, args: { price: string }) => {
