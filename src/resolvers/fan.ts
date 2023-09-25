@@ -287,6 +287,63 @@ export const fanMutation = {
         }
     },
 
+    bookExperience: async (_parent: any, args: { ids: { id: string, workId: string }}) => {
+        try {
+            const { id, workId } = args.ids
+
+            await prisma.work.update({
+                where: { id: workId },
+                data: {
+                    bookedBy: {
+                        connect: { id }
+                    }
+                }
+            })
+
+            return await prisma.fan.update({
+                where: { id },
+
+                data: {
+                    bookedExperiences: {
+                        connect: { id: workId }
+                    }
+                }
+            })
+        } catch (err) {
+            console.log(err)
+            throw { err }
+        }
+    },
+
+    unbookExperience: async (_parent: any, args: { ids: { id: string, workId: string }}) => {
+        try {
+            const { id, workId } = args.ids
+
+            await prisma.work.update({
+                where: { id: workId },
+
+                data: {
+                    bookedBy: {
+                        disconnect: { id }
+                    }
+                }
+            })
+
+            return await prisma.fan.update({
+                where: { id },
+
+                data: {
+                    bookedExperiences: {
+                        disconnect: { id: workId }
+                    }
+                }
+            })
+        } catch (err) {
+            console.log(err)
+            throw { err }
+        }
+    },
+
     deleteFan: async (_parent: any, args: { id: string }) => {
         try {
             return await prisma.fan.delete({

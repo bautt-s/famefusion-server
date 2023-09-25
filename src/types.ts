@@ -91,6 +91,8 @@ export const typeDefs = gql`
             savedCelebrities: [Celebrity]
             savedExpIDs: [String]
             savedExperiences: [Work]
+            bookedExpIDs: [String]
+            bookedExperiences: [Work]
             createdAt: Date
             updatedAt: Date
         }
@@ -128,6 +130,8 @@ export const typeDefs = gql`
             priceId: String
             savedIDs: [String]
             savedBy: [Fan]
+            bookedIDs: [String]
+            bookedBy: [Fan]
             createdAt: Date  
             updatedAt: Date 
         }
@@ -364,6 +368,8 @@ export const typeDefs = gql`
             removeFromWishlist(ids: WishlistInput): Fan
             addToExperiences(ids: ExperiencesInput): Fan
             removeFromExperiences(ids: ExperiencesInput): Fan
+            bookExperience(ids: ExperiencesInput): Fan
+            unbookExperience(ids: ExperiencesInput): Fan
             deleteFan(id: String): Fan
 
             createBusiness(business: BusinessInput): Business

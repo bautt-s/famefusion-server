@@ -45,7 +45,9 @@ model Fan {
   savedCelIDs         String[]      
   savedCelebrities    Celebrity[]   @relation(fields: [savedCelIDs], references: [id])
   savedExpIDs         String[]
-  savedExperiences    Work[]        @relation(fields: [savedExpIDs], references: [id])
+  savedExperiences    Work[]        @relation(name: "savedExp", fields: [savedExpIDs], references: [id])
+  bookedExpIDs        String[]
+  bookedExperiences   Work[]        @relation(name: "bookedExp", fields: [bookedExpIDs], references: [id])
   createdAt           DateTime      @default(now())
   updatedAt           DateTime      @updatedAt
 }
@@ -123,7 +125,9 @@ model Work {
   celebrity           Celebrity      @relation(fields: [celebrityId], references: [id], onDelete: Cascade)
   celebrityId         String         
   savedIDs            String[]
-  savedBy             Fan[]          @relation(fields: [savedIDs], references: [id])
+  savedBy             Fan[]          @relation(name: "savedExp", fields: [savedIDs], references: [id])
+  bookedIDs           String[]
+  bookedBy            Fan[]          @relation(name: "bookedExp", fields: [savedIDs], references: [id])
   createdAt           DateTime       @default(now())
   updatedAt           DateTime       @updatedAt
 }
