@@ -38,7 +38,8 @@ export const fanQuery = {
                             associatedUser: true
                         }
                     },
-                    savedExperiences: true
+                    savedExperiences: true,
+                    reservations: true
                 }
             })
         } catch (err) {
@@ -62,7 +63,8 @@ export const fanQuery = {
                             associatedUser: true
                         }
                     },
-                    savedExperiences: true
+                    savedExperiences: true,
+                    reservations: true
                 }
             })
 
@@ -71,6 +73,27 @@ export const fanQuery = {
             throw { err }
         }
     },
+
+    hasExperience: async (_parent: any, args: { ids: { id: string, workId: string }}) => {
+        try {
+            const { id, workId } = args.ids
+
+            const fan = await prisma.fan.findUnique({
+                where: { 
+                    id,
+                    bookedExperiences: {
+                        some: {
+                            id: workId
+                        }
+                    }
+                },
+            })
+
+            return fan ? true : false
+        } catch (err) {
+            throw { err }
+        }
+    }
 }
 
 export const fanMutation = {

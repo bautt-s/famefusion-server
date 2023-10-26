@@ -10,13 +10,27 @@ interface createProduct {
     }
 }
 
+interface checkoutArgs {
+    checkout: {
+        id: string,
+        workId: string,
+        price: string,
+        date: string,
+        title: string,
+        cel: string,
+        location: string,
+        totalPrice: number,
+        email: string
+    }
+}
+
 const STRIPE_STORE = process.env.STRIPE_STORE
 const stripe = new Stripe(STRIPE_STORE, { apiVersion: "2023-08-16" })
 
 export const stripeQuery = {
-    createCheckoutSession: async (_parent: any, args: { price: string }) => {
+    createCheckoutSession: async (_parent: any, args: checkoutArgs) => {
         try {
-            const { price } = args
+            const { id, workId, price, date, title, cel, location, totalPrice, email } = args.checkout
 
             const session = await stripe.checkout.sessions.create({
                 line_items: [
@@ -25,8 +39,18 @@ export const stripeQuery = {
                         quantity: 1
                     }
                 ],
+                metadata: {
+                    price: totalPrice,
+                    id,
+                    workId,
+                    date,
+                    title,
+                    cel,
+                    location,
+                    email
+                },
                 mode: 'payment',
-                success_url: process.env.FRONTEND_URL + '/checkout/success',
+                success_url: process.env.FRONTEND_URL + "/checkout/success?session_id={CHECKOUT_SESSION_ID}",
                 cancel_url: process.env.FRONTEND_URL + '/checkout/cancel',
             })
 
@@ -38,6 +62,22 @@ export const stripeQuery = {
             throw err
         }
     },
+
+    retrieveCheckout: async (_parent: any, args: { sessionId: string }) => {
+        try {
+            const { sessionId } = args
+
+            const session = await stripe.checkout.sessions.retrieve(sessionId)
+            
+            return JSON.stringify({
+                ...session.metadata,
+                created: session.created
+            })
+        } catch (err) {
+            console.log(err)
+            throw err
+        }
+    }, 
 
     getProductById: async (_parent: any, args: { productId: string }) => {
         try {

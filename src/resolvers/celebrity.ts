@@ -63,6 +63,97 @@ interface createDay {
     }
 }
 
+function formatDateTime(date: Date) {
+    if (!(date instanceof Date)) {
+        throw new Error("Invalid date object");
+    }
+
+    // Get the day of the week (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
+    const weekDay = date.toLocaleString('en-US', { weekday: 'long' });
+
+    // Get the hour and minutes in 24-hour format (HH:mm)
+    const hourAndMinute = date.toLocaleString('en-US', {
+        hour12: false, // 24-hour format
+        hour: '2-digit',
+        minute: '2-digit',
+    });
+
+    // Get the date in the format DD-MM-YYYY
+    const formattedDate = date.toLocaleString('en-US', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+    });
+
+    return {
+        weekDay,
+        hour: hourAndMinute,
+        date: formattedDate,
+    };
+}
+
+
+function getAvailabilityData(availabilityObject: any, reservations: any) {
+    // Create an array to store the results for 182 days
+    const result = [];
+    const now = new Date();
+    now.setHours(0, 0, 0, 0); // Set the time to midnight
+
+    for (let i = 0; i < 182; i++) {
+        const currentDate = new Date(now);
+        currentDate.setDate(currentDate.getDate() + i);
+
+        const currentWeekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][
+            currentDate.getDay()
+        ];
+
+        // Check if the current date is in the excludedDays array
+        const isExcluded = availabilityObject.excludedDays.some((excludedDate) =>
+            excludedDate.getTime() === currentDate.getTime()
+        );
+
+        if (!isExcluded) {
+            // Initialize availability as false
+            let isAvailable = false;
+
+            // Check if there are specialDays for the current date
+            const specialDay = availabilityObject.specialDays.find((special) =>
+                special.date === currentDate.toLocaleDateString("en-US")
+            );
+
+            if (specialDay) {
+                // Use the timeframes from the special day
+                isAvailable = specialDay.timeframes.length > 0;
+            } else {
+                // Use the timeframes for the regular weekday if it exists
+                const weekdayAttribute = currentWeekday.toLowerCase() + "Times";
+                if (availabilityObject[weekdayAttribute] && availabilityObject[weekdayAttribute].length > 0) {
+                    isAvailable = true;
+                }
+            }
+
+            // Count the reservations for the current date
+            const reservationCount = reservations.filter(
+                (reservation) =>
+                    reservation.weekDay === currentWeekday &&
+                    reservation.date === currentDate.toLocaleDateString("en-US")
+            ).length;
+
+            // Add the data for the current day to the result array
+            result.push({
+                date: currentDate.toLocaleDateString("en-US"),
+                weekDay: currentWeekday,
+                reservationCount,
+                isAvailable,
+            });
+        }
+    }
+
+    return result;
+}
+
+
+
 export const celebrityQuery = {
     getAllCelebrities: async (_parent: any, args?: { name?: string }) => {
         try {
@@ -138,15 +229,6 @@ export const celebrityQuery = {
                         in: args.filter.gender
                     } : undefined,
 
-                    availableDays: args.filter.availability.startDate || args.filter.availability.endDate ? {
-                        some: {
-                            date: {
-                                gte: args.filter.availability.startDate || undefined,
-                                lte: args.filter.availability.endDate || undefined
-                            }
-                        }
-                    } : undefined,
-
                     workList: args.filter.opportunities.length || args.filter.price.range ? {
                         some: {
                             type: args.filter.opportunities.length ? {
@@ -194,6 +276,44 @@ export const celebrityQuery = {
             throw { err }
         }
     },
+
+    getCalendarView: async (_parent: any, args: { id: string }) => {
+        try {
+            const timetables = await prisma.timetable.findMany({
+                where: { work: { celebrityId: args.id } },
+                select: {
+                    mondayTimes: true,
+                    tuesdayTimes: true,
+                    wednesdayTimes: true,
+                    thursdayTimes: true,
+                    fridayTimes: true,
+                    saturdayTimes: true,
+                    sundayTimes: true,
+                    excludedDays: true,
+                    specialDays: true,
+                },
+            })
+
+            const reservations = await prisma.reservation.findMany({
+                where: {
+                    work: {
+                        celebrityId: args.id
+                    }
+                },
+                select: {
+                    reservationTime: true
+                }
+            });
+
+            const reservedTimes = reservations.map(r => formatDateTime(r.reservationTime))
+            const availabilityData = getAvailabilityData(timetables, reservedTimes)
+            
+            return JSON.stringify(availabilityData)
+        } catch (err) {
+            console.log(err)
+            throw { err }
+        }
+    }
 }
 
 export const celebrityMutation = {
@@ -219,12 +339,12 @@ export const celebrityMutation = {
                 userId,
                 selfieImg,
                 locationImg,
-                identityImg, 
-                websiteLink, 
+                identityImg,
+                websiteLink,
                 tiktokLink,
-                facebookLink, 
-                twitterLink, 
-                instagramLink, 
+                facebookLink,
+                twitterLink,
+                instagramLink,
                 youtubeLink
             } = args.celebrity;
 
@@ -364,36 +484,6 @@ export const celebrityMutation = {
                     instagramLink: instagramLink || undefined,
                     facebookLink: facebookLink || undefined,
                     twitterLink: twitterLink || undefined,
-                }
-            })
-        } catch (err) {
-            throw { err }
-        }
-    },
-
-    createDay: async (_parent: any, args: createDay) => {
-        try {
-            const { date, celebrityId } = args.day
-
-            return await prisma.day.create({
-                data: {
-                    id: celebrityId + '-' + date.toDateString(),
-                    date,
-                    celebrityId
-                }
-            })
-        } catch (err) {
-            throw { err }
-        }
-    },
-
-    deleteDay: async (_parent: any, args: { date: Date, celebrityId: string }) => {
-        try {
-            const { date, celebrityId } = args
-
-            return await prisma.day.delete({
-                where: {
-                    id: celebrityId + '-' + date.toDateString()
                 }
             })
         } catch (err) {

@@ -7,6 +7,7 @@ import express from 'express'
 import http from 'http'
 import cors from 'cors'
 
+import { reservationQuery, reservationMutation } from './src/resolvers/reservation.js'
 import { celebrityMutation, celebrityQuery } from './src/resolvers/celebrity.js'
 import { businessMutation, businessQuery } from './src/resolvers/business.js'
 import { reviewMutation, reviewQuery } from './src/resolvers/review.js'
@@ -33,7 +34,8 @@ import { typeDefs } from './src/types.js'
             ...businessQuery,
             ...reviewQuery,
             ...workQuery,
-            ...stripeQuery
+            ...stripeQuery,
+            ...reservationQuery
         },
 
         Mutation: {
@@ -43,7 +45,8 @@ import { typeDefs } from './src/types.js'
             ...businessMutation,
             ...reviewMutation,
             ...workMutation,
-            ...stripeMutation
+            ...stripeMutation,
+            ...reservationMutation
         }
     }
 

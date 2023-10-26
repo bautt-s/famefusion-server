@@ -40,6 +40,7 @@ model Fan {
   identityImg         String?
   identityVerified    Boolean       @default(false)
   reviewList          Review[]
+  reservations        Reservation[]
   user                User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId              String        @unique
   savedCelIDs         String[]      
@@ -80,7 +81,6 @@ model Celebrity {
   identityVerified    Boolean       @default(false)
   media               String[]
   rating              Int?
-  availableDays       Day[]
   reviewList          Review[]
   workList            Work[]
   associatedUser      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -122,12 +122,15 @@ model Work {
   enabled             Boolean        @default(true)
   online              Boolean
   collaboration       Boolean
+  availableMonths     Int[]          @default([])
   celebrity           Celebrity      @relation(fields: [celebrityId], references: [id], onDelete: Cascade)
   celebrityId         String         
   savedIDs            String[]
   savedBy             Fan[]          @relation(name: "savedExp", fields: [savedIDs], references: [id])
   bookedIDs           String[]
   bookedBy            Fan[]          @relation(name: "bookedExp", fields: [savedIDs], references: [id])
+  reserves            Reservation[]
+  timetable           Timetable?     
   createdAt           DateTime       @default(now())
   updatedAt           DateTime       @updatedAt
 }
@@ -142,19 +145,57 @@ model Review {
   celebrity           Celebrity     @relation(fields: [celebrityId], references: [id], onDelete: Cascade)
   celebrityId         String        
   author              Fan           @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  authorId            String        
+  authorId            String       
   createdAt           DateTime      @default(now())
   updatedAt           DateTime      @updatedAt
 }
 
-model Day {
-  id            String              @id @map("_id") 
-  celebrity     Celebrity           @relation(fields: [celebrityId], references: [id], onDelete: Cascade)
-  celebrityId   String              
-  date          DateTime
+model Reservation {
+  id                  String        @id @default(uuid()) @map("_id") 
+  workId              String
+  work                Work          @relation(fields: [workId], references: [id], onDelete: Cascade)
+  fanId               String
+  fan                 Fan           @relation(fields: [fanId], references: [id], onDelete: Cascade)
+  reservationTime     DateTime
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+}
+
+model Timetable {
+    id                String        @id @default(uuid()) @map("_id") 
+    months            String[]
+    mondayTimes       String[]
+    tuesdayTimes      String[]
+    wednesdayTimes    String[]
+    thursdayTimes     String[]
+    fridayTimes       String[]
+    saturdayTimes     String[]
+    sundayTimes       String[]
+    excludedDays      DateTime[]
+    specialDays       SpecialDay[]
+    bookedTimes       DateTime[]
+    work              Work          @relation(fields: [workId], references: [id], onDelete: Cascade)
+    workId            String        @unique
+}
+
+model SpecialDay {
+    id                String        @id @default(uuid()) @map("_id") 
+    times             String[]
+    date              DateTime
+    timetable         Timetable     @relation(fields: [timetableId], references: [id], onDelete: Cascade)
+    timetableId       String
 }
 
 enum Role {
   User
   Admin
 }
+
+// celebrities have days. they can be available in these days if they have at least one experience slot available
+// if all experience slots are taken, then the celebrity isn't available that day
+
+// 'Work' model has a timetable attribute, which is an array of 'WorkDay' model.
+// 'WorkDay' model has an array of strings, which represent time frames available for that experience (should validate with duration)
+
+// how can I check celebrity availability ?
+// well, they have associated 'Work' models, which have associated 'WorkDays' 

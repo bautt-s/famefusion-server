@@ -170,6 +170,17 @@ export const typeDefs = gql`
             date: Date
         }
 
+        type Reservation {
+            id: String          
+            workId: String             
+            work: Work                  
+            fanId: String            
+            fan: Fan                   
+            date: Date            
+            createdAt: Date         
+            updatedAt: Date     
+        }
+
         input PriceInterface {
             range: Boolean
             min: Float
@@ -281,6 +292,25 @@ export const typeDefs = gql`
             collaboration: Boolean
             celebrityId: String
             productId: String
+            timetable: TimetableInput
+        }
+
+        input TimetableInput {
+            months: [String]
+            mondayTimes: [String]
+            tuesdayTimes: [String]
+            wednesdayTimes: [String]
+            thursdayTimes: [String]
+            fridayTimes: [String]
+            saturdayTimes: [String]
+            sundayTimes: [String]
+            excludedDays: [Date]
+            specialDays: [SpecialDayInput]
+        }
+
+        input SpecialDayInput {
+            times: [String]
+            date: Date
         }
 
         input ReviewInput {
@@ -318,6 +348,18 @@ export const typeDefs = gql`
             unit_amount: Int
         }
 
+        input CheckoutInput {
+            id: String
+            workId: String
+            price: String
+            totalPrice: Float
+            date: String
+            title: String
+            cel: String
+            location: String
+            email: String
+        }
+
         input PriceInput {
             priceId: String
             unit_amount: Int
@@ -328,6 +370,18 @@ export const typeDefs = gql`
             active: Boolean
         }
 
+        input ReservationInput {
+            id: String,
+            workId: String,
+            fanId: String,
+            date: Date
+        }
+
+        input TimesInput {
+            workId: String,
+            targetDate: Date
+        }
+
         type Query {
             getAllUsers: [User]
             getUserById(id: String): User
@@ -336,9 +390,11 @@ export const typeDefs = gql`
             getAllCelebrities(name: String): [Celebrity]
             getCelebrityById(id: String): Celebrity
             getFilteredCelebrities(filter: DataFilter): [Celebrity]
+            getCalendarView(id: String): String
 
             getAllFans: [Fan]
             getFanById(id: String): Fan
+            hasExperience(ids: ExperiencesInput): Boolean
 
             getAllBusinesses: [Business]
             getBusinessById(id: String): Business
@@ -346,9 +402,14 @@ export const typeDefs = gql`
             getAllReviews: [Review]
 
             getWorkById(id: String): Work
+            getWorkTimes(times: TimesInput): [String]
 
-            createCheckoutSession(price: String): String
+            createCheckoutSession(checkout: CheckoutInput): String
+            retrieveCheckout(sessionId: String): String
             getProductById(productId: String): Product
+
+            getReservationById(id: String): Reservation
+            getReservationByFan(id: String): [Reservation]
         }
 
         type Mutation {
@@ -359,8 +420,6 @@ export const typeDefs = gql`
             createCelebrity(celebrity: CelebrityInput): Celebrity
             updateCelebrity(celebrity: CelebrityInput): Celebrity
             deleteCelebrity(id: String): Celebrity
-            createDay(day: DayInput): Day
-            deleteDay(day: DayInput): Day
 
             createFan(fan: FanInput): Fan
             updateFan(fan: FanInput): Fan
@@ -388,5 +447,8 @@ export const typeDefs = gql`
             updateStripeProduct(product: ProductInput): Product
             updateStripePrice(price: PriceInput): String
             activateStripeProduct(enable: EnableInput): String
+
+            createReservation(reservation: ReservationInput): Reservation
+            deleteReservation(id: String): Reservation
         }
 `
