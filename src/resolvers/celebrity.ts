@@ -53,6 +53,7 @@ interface createArgs {
         facebookLink?: string,
         twitterLink?: string,
         youtubeLink?: string,
+        emailKey?: string // used to specify folder in order to update images
     }
 }
 
@@ -353,7 +354,7 @@ export const celebrityMutation = {
 
             media.map(async (image) => {
                 const result = await cloudinary.uploader.upload(image, {
-                    folder: 'celebritiesImgs',
+                    folder: `celebrityImages/${email}`,
                     resource_type: 'auto',
                 })
 
@@ -437,7 +438,8 @@ export const celebrityMutation = {
                 youtubeLink,
                 instagramLink,
                 facebookLink,
-                twitterLink
+                twitterLink,
+                emailKey
             } = args.celebrity;
 
             // upload verification files to cloudinary
@@ -452,6 +454,37 @@ export const celebrityMutation = {
             const locationCloudinary = locationImg ? await cloudinary.uploader.upload(locationImg, {
                 folder: 'celebrityLocations',
             }) : undefined
+
+            const mediaCopy = [...media]
+
+            if (Array.isArray(media)) {
+                const uploadPromises = [];
+                const deleteAllFiles = cloudinary.api.delete_resources_by_prefix(`celebrityImages/${emailKey}`);
+
+                await deleteAllFiles.then(async () => {
+                    media.forEach(async (data) => {
+                        if (data?.startsWith("UPDATE-CEL")) {
+                            const uploadPromise = cloudinary.uploader.upload(data.slice(11), {
+                                folder: `celebrityImages/${emailKey}`,
+                            }).catch(err => console.log(err));
+                            uploadPromises.push(uploadPromise);
+                        }
+                    });
+
+                    await Promise.all(uploadPromises)
+                        .then(uploadedMediaArray => {
+                            let uploadedIndex = 0;
+
+                            for (let i = 0; i < mediaCopy.length; i++) {
+                                if (mediaCopy[i]?.startsWith("UPDATE-CEL")) {
+                                    mediaCopy[i] = uploadedMediaArray[uploadedIndex].url;
+                                    uploadedIndex++;
+                                }
+                            }
+                        })
+                        .catch(err => console.log(err));
+                });
+            }
 
             return await prisma.celebrity.update({
                 where: { id },
@@ -469,7 +502,7 @@ export const celebrityMutation = {
                     gender: gender || undefined,
                     languages: languages || undefined,
                     interests: interests || undefined,
-                    media: media || undefined,
+                    media: mediaCopy || undefined,
                     rating: rating || undefined,
                     userId: userId || undefined,
                     locationVerified: locationVerified || undefined,
@@ -487,6 +520,7 @@ export const celebrityMutation = {
                 }
             })
         } catch (err) {
+            console.log(err)
             throw { err }
         }
     },

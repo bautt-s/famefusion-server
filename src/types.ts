@@ -236,12 +236,13 @@ export const typeDefs = gql`
             selfieImg: String
             locationImg: String
             identityImg: String
-            websiteLink: String,
-            instagramLink: String,
-            tiktokLink: String,
-            facebookLink: String,
-            twitterLink: String,
-            youtubeLink: String,
+            websiteLink: String
+            instagramLink: String
+            tiktokLink: String
+            facebookLink: String
+            twitterLink: String
+            youtubeLink: String
+            emailKey: String
         }
 
         input FanInput {
