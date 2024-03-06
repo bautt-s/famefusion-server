@@ -83,6 +83,7 @@ model Celebrity {
   rating              Int?
   reviewList          Review[]
   workList            Work[]
+  drafts              String[]
   associatedUser      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   savedIDs            String[]      
   savedBy             Fan[]         @relation(fields: [savedIDs], references: [id])
@@ -115,13 +116,20 @@ model Work {
   title               String
   type                String
   price               Float
+  shortDescription    String?
   description         String
+  bookingInfo         String?
   duration            String
   productId           String?
   priceId             String?
   enabled             Boolean        @default(true)
   online              Boolean
   collaboration       Boolean
+  language            String?
+  categories          String[]
+  inclusions          String[]
+  exclusions          String[]
+  filters             String[]
   availableMonths     Int[]          @default([])
   celebrity           Celebrity      @relation(fields: [celebrityId], references: [id], onDelete: Cascade)
   celebrityId         String         
@@ -171,7 +179,6 @@ model Timetable {
     fridayTimes       String[]
     saturdayTimes     String[]
     sundayTimes       String[]
-    excludedDays      DateTime[]
     specialDays       SpecialDay[]
     bookedTimes       DateTime[]
     work              Work          @relation(fields: [workId], references: [id], onDelete: Cascade)

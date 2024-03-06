@@ -108,46 +108,41 @@ function getAvailabilityData(availabilityObject: any, reservations: any) {
             currentDate.getDay()
         ];
 
-        // Check if the current date is in the excludedDays array
-        const isExcluded = availabilityObject.excludedDays.some((excludedDate) =>
-            excludedDate.getTime() === currentDate.getTime()
+
+        // Initialize availability as false
+        let isAvailable = false;
+
+        // Check if there are specialDays for the current date
+        const specialDay = availabilityObject.specialDays.find((special) =>
+            special.date === currentDate.toLocaleDateString("en-US")
         );
 
-        if (!isExcluded) {
-            // Initialize availability as false
-            let isAvailable = false;
-
-            // Check if there are specialDays for the current date
-            const specialDay = availabilityObject.specialDays.find((special) =>
-                special.date === currentDate.toLocaleDateString("en-US")
-            );
-
-            if (specialDay) {
-                // Use the timeframes from the special day
-                isAvailable = specialDay.timeframes.length > 0;
-            } else {
-                // Use the timeframes for the regular weekday if it exists
-                const weekdayAttribute = currentWeekday.toLowerCase() + "Times";
-                if (availabilityObject[weekdayAttribute] && availabilityObject[weekdayAttribute].length > 0) {
-                    isAvailable = true;
-                }
+        if (specialDay) {
+            // Use the timeframes from the special day
+            isAvailable = specialDay.timeframes.length > 0;
+        } else {
+            // Use the timeframes for the regular weekday if it exists
+            const weekdayAttribute = currentWeekday.toLowerCase() + "Times";
+            if (availabilityObject[weekdayAttribute] && availabilityObject[weekdayAttribute].length > 0) {
+                isAvailable = true;
             }
-
-            // Count the reservations for the current date
-            const reservationCount = reservations.filter(
-                (reservation) =>
-                    reservation.weekDay === currentWeekday &&
-                    reservation.date === currentDate.toLocaleDateString("en-US")
-            ).length;
-
-            // Add the data for the current day to the result array
-            result.push({
-                date: currentDate.toLocaleDateString("en-US"),
-                weekDay: currentWeekday,
-                reservationCount,
-                isAvailable,
-            });
         }
+
+        // Count the reservations for the current date
+        const reservationCount = reservations.filter(
+            (reservation) =>
+                reservation.weekDay === currentWeekday &&
+                reservation.date === currentDate.toLocaleDateString("en-US")
+        ).length;
+
+        // Add the data for the current day to the result array
+        result.push({
+            date: currentDate.toLocaleDateString("en-US"),
+            weekDay: currentWeekday,
+            reservationCount,
+            isAvailable,
+        });
+
     }
 
     return result;
@@ -290,7 +285,6 @@ export const celebrityQuery = {
                     fridayTimes: true,
                     saturdayTimes: true,
                     sundayTimes: true,
-                    excludedDays: true,
                     specialDays: true,
                 },
             })
@@ -308,7 +302,7 @@ export const celebrityQuery = {
 
             const reservedTimes = reservations.map(r => formatDateTime(r.reservationTime))
             const availabilityData = getAvailabilityData(timetables, reservedTimes)
-            
+
             return JSON.stringify(availabilityData)
         } catch (err) {
             console.log(err)

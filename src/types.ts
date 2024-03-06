@@ -305,7 +305,6 @@ export const typeDefs = gql`
             fridayTimes: [String]
             saturdayTimes: [String]
             sundayTimes: [String]
-            excludedDays: [Date]
             specialDays: [SpecialDayInput]
         }
 

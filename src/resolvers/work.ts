@@ -21,7 +21,6 @@ interface updateWork {
             fridayTimes: string[]
             saturdayTimes: string[]
             sundayTimes: string[]
-            excludedDays: Date[]
             specialDays: {
                 times: string[]
                 date: Date
@@ -135,7 +134,6 @@ export const workMutation = {
                     fridayTimes: timetable.fridayTimes,
                     saturdayTimes: timetable.saturdayTimes,
                     sundayTimes: timetable.sundayTimes,
-                    excludedDays: timetable.excludedDays,
                     workId: createdWork.id
                 }
             })
